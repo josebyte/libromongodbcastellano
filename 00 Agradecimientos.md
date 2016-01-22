@@ -1,0 +1,11 @@
+#Agradecimientos
+
+Me llamo [Joseba Madrigal](http://www.josebamadrigal.com), soy graduado en informática además de una persona curiosa y analítica, me encanta descubrir nuevas tecnologías y ayudar a las personas de mi entorno, por ello he dedicado un par de meses a escribir este libro que espero ayude a la gente a profesionalizarse en MongoDB.
+
+El libro está escrito para programadores con interés en utilizar MongoDB a un nivel profesional. El motivo de escribir este libro es que cuando intente realizar el salto del mundo SQL, en el cual me encontraba muy cómodo, no encontré ninguna documentación en Español y aunque todo buen desarrollador debe tener buen nivel de inglés, siempre es más cómodo leer en la lengua materna.
+
+Había pasado muchos años trabajando con Oracle PL-SQL y más de los que me gustaría trabajando con MYSQL hasta que entre en "Tapquo S.L." y conocí más de cerca el mundo no-sql. Fue entonces cuando me apunté a los cursos de MongoDB-University y comencé a apreciar las virtudes de este mundo no-sql tan desconocido para mí. En apenas 3 meses había logrado la certificación oficial de MongoDb tanto de sus cursos como en su examen, por lo que me di cuenta de que la curva de aprendizaje es realmente rápida y buena, por consiguiente quería hacerla aún mejor para todos los hispanohablantes que quieran profesionalizarse en MongoDB.
+
+Escribí este libro en mis ratos libres, es difícil encontrar un rato libre cuando tienes una vida con un trabajo a jornada completa, impartes clases después de la jornada de trabajo, estudias, tienes familia, novia y amigos. Estas líneas no hubieran sido posibles sin el apoyo incondicional de todo mi entorno, desde aquí me gustaría agradecer a todos su comprensión y sus ánimos. A toda mi familia, pero en especial a mi hermano Aitor, por ayudarme a mejorar mi inglés, apoyarme, animarme y además hacer la revisión final del libro. A mi novia Katy agredezco su paciencia, aguantarme en los buenos y los malos momentos y por permitirme ponerme en el ordenador para escribir pese a que no le guste verme delante del PC. A mis amigos les agradezco que me ayuden a desconectar, lo cual es imprescindible de vez en cuando. A todos ellos les estaré eternamente agradecido por apoyarme siempre en todas mis decisiones.
+
+Y como no, gracias a ti por descargar este libro, espero que sea de tu agrado.

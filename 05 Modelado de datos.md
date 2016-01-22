@@ -1,0 +1,74 @@
+#Modelado de datos
+
+Si vienes del mundo sql estarás acostumbrado a crear entidades, aplicar las formas normales... En MongoDb se crean los esquemas de la base de datos orientados al uso que se le da a los datos en la aplicación. Este tipo de diseño de esquema se llama "Application driven schema". Analizaremos los datos y los patrones de acceso que se usarán en el programa para crear un esquema a esos datos.
+
+Muchas veces nos encontraremos con la duda de si embeber un documento o no. Por ejemplo en un blog, imaginemos una colección post:
+
+```
+{
+  "author"   : "Joseba",
+  "title"    : "Mongodb introduction",
+  "text"     : "MongoDB is a no-sql document oriented data base ...",
+  "comments" : [
+                {"author": "Patxi", "comment": "Thanks for this post!" },
+                {"author": "Juan", "comment": "Nice post!" }
+               ],
+  "tags"     : ["javascript", "mongodb", "jquery", "angularjs"],
+}
+```
+
+Normalmente si no vamos a acceder de forma independiente al contenido de un comentario y sabemos que no seran muchos los comentarios o seran limitados, lo embeberemos. Lo normal es que al mostrar el post mostremos abajo los comentarios, es difícil querer leer un comentario sin ver el post del que se trata, MongoDB está orientado a la programación.
+Cuando tengas duda entre embeber o no, decántate por la forma en la que vas a acceder a los datos.
+
+Reglas:
+- Relaciones 1-1: Por ejemplo un usuario tiene un único dni y ese dni no pertenece a nadie más que a ese usuario. Ese tipo de datos deben estar siempre embebidos en un documento dentro del usuario:
+```
+{
+  nick: "josebyte",
+  pass: "1234",
+  type: "admin",
+  dni:{
+    codigo: "78964914f",
+    fechaEmision: "",
+    fechaCaducidad: "",
+    padre: "",
+    madre: ""
+  }
+}
+```
+- Relaciones 1-n: Por ejemplo un usuario tiene de 0 a n coches y cada coche pertenece únicamente a un usuario. Ese tipo de datos se deben embeber en un array de documentos:
+
+```
+{
+  nick: "josebyte",
+  pass: "1234",
+  type: "admin",
+  cars:[
+    {marca: "Ford", año: "2009", matricula:"1234-GGG"},
+    {marca: "Opel", año: "2001", matricula:"4321-JJJ"}
+  ]
+}
+```
+- Relaciones n-m: Si pensamos en el ejemplo anterior y que un coche puede tener varios usuarios el ejemplo anterior sería n-m y en lugar de embeber los datos en el documento deberiamos crear otra coleccion:
+
+```
+Colección usuarios:
+{
+  nick: "josebyte",
+  pass: "1234",
+  type: "admin",
+  cars:[
+    11154,
+    11155
+  ]
+}
+
+Colección coches:
+{"_id": 11154, "marca": "Ford", "año": "2009", "matricula":"1234-GGG"}
+{"_id": 11155, "marca": "Opel", "año": "2001", "matricula":"4321-JJJ"}
+```
+
+Nota: Se podra embeber en usuarios el array de coche o a la inversa, un array conductores dentro de los documentos coches que contendrá el \_id de cada usuario de ese coche. Dependerá de cómo se va a acceder a los datos en el programa.
+
+
+Embeber documentos 1-1 y 1-n proporcionará mayor rapidez de lectura. Es importante que se analicen las lecturas y escrituras que realizará el programa sobre la base de datos para orientar el modelo de base de datos y mejorar la eficiencia.

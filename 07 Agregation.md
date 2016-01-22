@@ -1,0 +1,107 @@
+#Agregation
+
+MongoDB dispone de herramientas para hacer consultas sobre agrupaciones de documentos. Podemos agrupar datos de varios documentos y realizar operaciones sobre esa agrupación. Utilizaremos agregaciones por ejemplo para mostrar estadísticas sobre nuestros documentos. Funciona de forma similar al comando GROUP BY y HAVING de SQL.
+
+
+Si quisiésemos agrupar y contar cuantos usuarios hay por país:
+
+```
+db.usuarios.aggregate([
+{
+$group: {
+    "_id": "$pais",
+    "num_usuarios": {$sum: 1}
+    }
+}
+])
+```
+
+Si quisiésemos agrupar por usuarios de cada país y provincia:
+```
+db.usuarios.aggregate([
+{
+$group: {
+    "_id":
+      {
+      "pais":"$pais",
+      "provincia":"$provincia"
+      },
+    "num_usuarios": {$sum: 1}
+    }
+}
+])
+```
+- El primer parámetro de cada id entrecomillado que no tiene $ es el nombre que nosotros queramos mostrar.
+- El valor con $ después de "pais" y "provincia" debe coincidir con el campo de la base de datos.
+- $sum es una expresión que suma 1 por cada documento.
+
+La agregación usa un pipeline, y cada una de estas fases pueden aparecer más de una vez en el pipeline:
+- $project -> remodela el documento seleccionando los campos deseados o trayéndolos de lo más profundo a lo más alto. 1-1
+- $match -> filtra. n-1
+- $group -> puedes sumar contar y agrupar por determinado campo. n-1.
+- $sort -> ordenación. 1-1
+- $skip -> saltar documentos. n-1
+- $limit -> limitar los resultados.
+- $unwind -> normaliza el array, por ejemplo: tags:["rojo", "azul"] se convertirá en: tags: "rojo", tags: "azul"
+- $out -> redirigir la salida a otra coleccion en lugar de a un cursor (por defecto) 1-1
+
+Expresiones:
+- $sum
+- $avg
+- $min
+- $max
+- $push
+- $push
+- $addToSet
+
+- $first -> requiere que ordenes con sort los documentos
+- $last -> requiere que ordenes con sort los documentos
+
+
+Si quisiéramos sumar los puntos de cada pais que han obtenido los usuarios:
+```
+db.usuarios.aggregate([
+{
+$group: {
+    "_id": "$pais",
+    "puntosPorPais": {$sum: "$puntos"}
+    }
+}
+])
+```
+
+Si quisiéramos calcular la media de puntos de cada país:
+```
+db.usuarios.aggregate([
+{
+$group: {
+    "_id": "$pais",
+    "mediaDePuntos": {$avg: "$puntos"}
+    }
+}
+])
+```
+
+Si quisiéramos mostrar las provincias que tienen usuarios:
+```
+db.usuarios.aggregate([
+{
+$group: {
+    "_id": "$pais",
+    "provincias": {$addToSet: "$provincia"}
+    }
+}
+])
+```
+
+Si quisiéramos obtener el mejor usuario de cada país:
+```
+db.usuarios.aggregate([
+{
+$group: {
+    "_id": "$pais",
+    "maxPuntos": {$max: "$puntos"}
+    }
+}
+])
+```

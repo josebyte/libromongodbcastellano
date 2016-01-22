@@ -1,0 +1,138 @@
+#Introducción a MongoDB
+
+#Un poco de historia
+
+Actualmente se escucha hablar de BigData, pero antes de comenzar hablando de grandes cantidades de datos es mejor empezar por el origen, ¿cuál es el motivo de la existencia de bases de datos para Big Data?
+
+Desde el origen de la informática ha existido la necesidad de almacenar información de forma permanente. Con el término permanente se hace alusión a datos almacenados en un medio físico como un disco duro ,(la memoria RAM no es almacenamiento permanente), la cual puede ser leída posteriormente incluso despues de apagar y encender el equipo. Inicialmente se guardaban los datos en ficheros de texto, pero pronto surgieron limitaciones, es un método poco eficaz, ¿qué ocurre si cambiamos la estructura de los datos? ¿y si cambiamos algunos datos? ¿inconsistencias?... Por ello surgieron las bases de datos históricas como las jerárquicas, en red o transaccionales. Estas bases de datos se siguen estudiando actualmente en las universidades pero ya no son utilizadas debido a sus limitaciones: Complejidad, duplicidad de registros, Integridad referencial, (No existe garantía de que un registro hijo esté relacionado con un registro padre válido), Desnormalización...
+
+Debido a esas limitaciones surgieron las bases de datos que se utilizan actualmente.
+Existen tres tipos de bases de datos:
+- Bases de datos relacionales: Hasta la actualidad son las más usadas, utilizan SQL. Por ejemplo: Oracle, MS SQL Server, MySQL o MariaDB son bases de datos relacionales.
+- Bases de datos orientadas a objetos: Se han diseñado para trabajar bien en conjunción con lenguajes de programación orientados a objetos como Java, C#, Visual Basic.NET y C++. (No están muy extendidas en la actualidad.)
+- Bases de datos no-relacionales: No utilizan lenguaje SQL y están orientadas a la escalabilidad, por ejemplo MongoDB.
+
+#¿Qué es MongoDB?
+
+MongoDB es una base de datos no-relacional de documentos JSON y de código abierto escrito en C++, que proporciona alto rendimiento, alta disponibilidad y escalabilidad automática.
+
+El concepto de escalabilidad está totalmente ligado con "Big data" debido a que cuando se trabaja con grandes cantidades de datos, en otros tipos de bases de datos es complejo y costoso de gestionar. Las bases de datos como MongoDb proporcionan escalabilidad automática, lo cual hace que esta base de datos sea idonea para grandes cantidades crecientes de información.
+
+El desarrollo de MongoDB comenzó en el año 2007 por la empresa 10gen3, publicando una versión final en el 2009 y actualmente se encuentra en la versión 3.0.
+
+Por lo tanto hemos mencionado que MongoDB es una base de datos escalable, no-relacional y orientada a documentos JSON(BSON), pero ¿qué significa no-relacional? y ¿documentos JSON(BSON)?
+
+##No-relacional
+
+No-relacional es un término nuevo que se aplica a todas las bases de datos que no son relacionales. Este tipo de base de datos también son conocidas como "no-SQL" o "Big Data".
+MongoDB tiene las siguientes características no-relacionales:
+- No-SQL.
+- No tiene JOINs.
+- No tiene esquema.
+- Escala horizontalmente.
+- No tiene transacciones atómicas para multiples documentos.
+
+###No-SQL
+MongoDB no usa SQL como lenguaje de consultas, en su lugar dispone de una serie de métodos en JavaScript que permiten realizar consultas y operaciones.
+
+###No tiene JOINs
+En MongoDB no se puede hacer una relación entre dos colecciones, no existen las "join" del mundo SQL. La razón es que MongoDB está orientado a ser escalable y las join de las bases de datos relacionales escalan muy mal.
+
+###Sin esquema
+Una misma colección (en sql: "colección"=="tabla") de documentos puede contener documentos con distinto formato, a esto se le llama "schemeless" o "sin esquema". Es decir podremos tener ,por ejemplo, una colección de usuarios en donde guardemos datos diferentes para cada usuario. A esa capacidad le llamamos polimorfismo.
+
+###Escalabilidad horizontal
+Uno de los motivos más importantes por el que se han creado las bases de datos no-relacionales es por la escalabilidad. Actualmente cada vez más nos encontramos con gran cantidad de datos en diferentes servidores. Las bases de datos relacionales son lentas y poco escalables en esos casos, no están pensadas para que la información almacenada sea muy grande y se encuentre distribuida, por ello ha surgido MongoDB. Este sistema de base de datos tiene la capacidad de escalar horizontalmente correcta y fácilmente sin penalización. Un sistema escala horizontalmente bien si al agregar más nodos al mismo, el rendimiento de éste mejora.
+Quizá ahora entiendas un poco mejor el término que comentamos anteriormente que se usa para estas bases de datos, están diseñadas para grandes cantidades de información, por ese motivo son conocidas también como bases de datos de "Big Data".
+
+###Sin transacciones multi-documento
+MongoDB solo garantiza atomicidad en el propio documento. ¿Que es la atomicidad? Según Wikipedia: "La atomicidad es la propiedad que asegura que una operación se ha realizado o no, y por lo tanto ante un fallo del sistema no puede quedar a medias".
+
+Imaginemos que estamos desarrollando la aplicación de un banco, dispondremos de diferentes cuentas para cada usuario y existirán transferencias de dinero de una cuenta a otra. Las bases de datos relacionales aseguran que si solicitamos restar de una cuenta y añadir a otra ésta sea una operación atómica que no puede quedar a medias, o se hacen las dos operaciones(resta de una cuenta y suma a la otra) o no se hace ninguna.
+
+En la realidad, las bases de datos no se encuentran en un mismo sistema por lo que en las bases de datos relacionales también es necesario controlar la atomicidad si llevamos este caso a la vida real.
+
+En MongoDB solo las operaciones sobre un documento son atómicas, por lo que hay que tomar medidas en el código por ejemplo mediante la creación de un "semáforo" para resolver este tipo de problemas.
+
+##Documentos JSON
+
+MongoDB está orientada a documentos en "JavaScript Object Notation" (JSON), por lo que almacenamos *documentos* en lugar de "registros" o "filas".
+
+Un ejemplo de un documento JSON puede ser:
+
+```
+{"name": "Joseba", "surname": "Madrigal"}
+```
+
+Un documento JSON es un documento clave-valor. En el ejemplo anterior la clave "name" contiene el valor "Joseba" y la clave "surname" contiene el valor "Madrigal".
+
+Un ejemplo más complejo de un JSON:
+
+```
+{
+  "name" : "Joseba",
+  "surname" : "Madrigal",
+  "age" : 28,
+  "skills" : ["javascript", "MongoDB", "jquery", "angularjs", "php"],
+  "address" : {
+                "street_address": "23 Elm Drive" ,
+                "city": "Palo Alto",
+                "state": "California",
+                "zipcode": "94305"
+              }
+}
+```
+
+Más adelante comentaremos los tipos de datos de JSON y veremos que internamente se almacenan BSONs.
+Existe un límite de 16MB por documento en MongoDB. En 16MB cabe mucha información y si tuviésemos que introducir más podríamos partir esa información en varias colecciones. Para usar documentos más grandes MongoDB proporciona GridFS.
+
+JSON es un estándar y puedes saber más en [JSON.org](http://json.org)
+
+##BSON
+
+Pese a que nosotros a priori en MongoDB usemos documentos en formato JSON, MongoDB trabaja internamente con BSON (JSON Binario). Un BSON no es más que la representación binaria de un documento JSON.
+
+Puedes ver más información en [BSONspec](http://bsonspec.org). BSON extiende del modelo JSON para proporcionar "tipos de datos" para una correcta codificacion y decodificación en los diferentes lenguajes. Por lo tanto BSON proporciona a MongoDB dos capacidades:
+1. Rápida escaneabilidad
+2. Tipos de datos
+
+JSON proporciona únicamente 6 tipos de dato:
+- String
+- Number
+- booleans
+- null
+- arrays
+- objetos / documentos
+
+Los tipos de datos que maneja internamente BSON son los siguientes:
+- Double
+- String
+- Object
+- Array
+- Binary data
+- Undefined (Deprecated)
+- Object id
+- Boolean
+- Date
+- Null
+- Regular Expression
+- JavaScript Symbol JavaScript (with scope)
+- 32-bit integer
+- Timestamp
+- 64-bit integer
+- Min key
+- Max key
+
+Podemos ver BSON como un formato serializado de JSON.
+
+![Alt text](./images/esquemaBSON.jpg)
+
+La figura superior muestra el proceso de conversión JSON-BSON, en MongoDB los datos se almacenan en BSON y se envían en dicho formato, el encargado de realizar la conversión BSON<->JSON es el driver de Mongo de la plataforma cliente correspondiente.
+
+En el proceso de consulta de un documento el servidor de MongoDB nos sirve un BSON y nuestra APP a través del driver de Mongodb transforma el BSON a JSON. Cuando enviamos información de nuestra APP al servidor enviamos un JSON y el driver es el encargado de convertirlo a BSON para su envío. Todo este proceso se realiza de forma transparente.
+
+Los nombres de los campos tienen las siguientes limitaciones:
+- El nombre de campo \_id está reservado para la primary key; debe ser único e inmutable, y puede ser de cualquier tipo excepto array.
+- Los nombres no pueden empezar por el signo dólar ($).
+- Los nombres no pueden contener punto (.).
+- Los nombres no pueden contener el caracter null.

@@ -1,0 +1,249 @@
+#CRUD
+
+Las operaciones CRUD (Create, Read, Update, Delete) existen en Mongodb en forma de funciones. No se puede usar SQL, se utilizan las funciones o métodos que nos proporciona MongoDB.
+-	C(create) -> insert, save, update(upsert)
+-	R(read)   -> find, findOne
+-	U(update) -> update, save
+-	D(delete) -> remove
+
+
+##Insert
+
+```
+db.collection.insert(
+   <document or array of documents>,
+   {
+     writeConcern: <document>,
+     ordered: <boolean>
+   }
+)
+```
+
+Para insertar un documento en MongoDb utilizaremos la función insert sobre la colección de una base de datos. Si la colección no existe, la creará automáticamente. Por ejemplo:
+
+```
+var doc = {"name": "Joseba", "surname": "Madrigal", "website": "http://josebamadrigal.com"};
+db.people.insert( doc );
+```
+
+- Primero generamos una variable doc e introducimos un objeto en formato JSON.
+- db.people representa la colección de datos donde insertaremos el documento. Puede no existir, en caso de que no exista se creará automáticamente.
+- No hemos añadido parámetros writeConcern ni ordered en esta ocasión, los comentaremos más adelante ya que esta es nuestra primera inserción en MongoDB.
+
+
+¡Felicidades, ya has insertado tu primer documento en la base de datos!
+
+Si hacemos una búsqueda de todos los documentos que hay en la colección people:
+
+```
+db.people.find();
+```
+
+Observaremos que además de nuestras claves y valores MongoDB ha insertado automáticamente una clave "\_id" con un Object ID con una estructura similar a: ObjectID("507f191e810c19729de860ea").
+
+Eso ocurre porque automáticamente MongoDB añadirá a nuestros documentos una clave primaria única e inmutable (no se puede cambiar una vez insertada) llamada \_id. El \_id por lo tanto será único dentro de cada colección de documentos, además será inmutable por lo que podríamos localizar inequívocamente un documento dentro de una colección por su \_id. La única forma de "cambiar" un \_id a un documento es borrándolo y volviéndolo a insertar, el \_id generado automáticamente será diferente.
+
+Si deseamos crear nuestra propia clave única podemos insertar nosotros un \_id por ejemplo:
+
+```
+var doc = {"\_id": "mjoseba@gmail.com", "name": "Joseba", "surname": "Madrigal"};
+db.people.insert( doc );
+```
+
+El \_id de este documento será "mjoseba@gmail.com". He elegido una cuenta de correo ya que es una clave primaria única e inmutable para la mayoría de aplicaciones ,(es muy raro que se cambie el email), normalmente se suele utilizar como nombre de usuario para el login. Podríamos utilizar el dni perfectamente ya que identifica este tipo de documento, pero debes ser cuidadoso al elegir la clave, si no crees que puedas hacerlo deja que MongoDb genere automáticamente el \_id por ti.
+
+##update
+
+```
+db.collection.update(
+   {<query>},
+   {<update>},
+   {
+     upsert: <boolean>,
+     multi: <boolean>,
+     writeConcern: <document>
+   }
+)
+```
+- upsert: true -> Hace que si el documento no existe se cree y si existe lo actualiza. Si lo establecemos a false ,si existe lo actualiza, en caso contrario no hace nada.
+- multi: true  -> Especificamos que queremos actualizar múltiples documentos, por defecto es false de modo que solo se actualiza un único documento, esto es importante ya que en SQL un update actualiza todas las coincidencias, en MongoDB por defecto multi es false por lo que solo actualizará la primera coincidencia.
+- writeConcer  -> Hablaremos de este concepto en el tema de "ReplicaSet", se trata de una opción para definir en cuantas réplicas de servidores mongo debe estar escrito el cambio para devolver un "OK".
+
+Existen dos formas de update en Mongodb.
+- Update de "reemplazo de documento completo"
+- Update "parcial"
+
+Podemos actualizar un documento completo, para ello especificaremos en el primer parámetro la query con el documento que queremos actualizar, en el segundo la actualización que queremos aplicar y en el tercer parámetro las opciones. Por ejemplo:
+
+```
+db.people.update( { name: "Joseba" }, { name: "Jose", active: 1 }, { upsert: true } )
+```
+
+Con el update anterior vamos a editar el documento completo con "name" "Joseba" y vamos a introducir el nombre "Jose" y active con valor 1.
+
+Realizando esta update perderemos los campos que no hayamos especificado, quedara un documento tal y como hemos especificado:
+
+{ \_id: ObjectId("50691737d386d8fadbd6b01d") , name: "Jose", active: 2 }
+
+Para editar uno o varios campos y preservar el documento o lo que es lo mismo realizar un "update parcial" debemos utilizar el operador $set, por ejemplo:
+
+```
+db.people.update( { name: "Joseba" }, { $set: {name: "Jose", fullstack: 1 } }, { upsert: true } )
+```
+
+De esta forma realizaremos un update parcial y añadiremos fullstack: 1 , cambiaremos el nombre por "Jose" y mantendremos intactos los campos que existiesen previamente.
+
+Si no agregamos la opción multi:true solo se modificará 1 documento, si lo añadimos se modificarán todos los usuarios que tengan el nombre "Joseba".
+
+
+##save
+
+.save realiza la misma acción que update con "upsert" por defecto. Es decir, si no exist el \_id insertará el nuevo documento y si existe lo actualizará.
+
+```
+db.collection.save(
+   <document>,
+   {
+     writeConcern: <document>
+   }
+)
+```
+
+Por ejemplo:
+
+```
+db.people.save( { _id: ObjectId("50691737d386d8fadbd6b01d"), nombre: "Patxi", surname: "Etxeberria" } )
+```
+Si el id existe actualizará el documento, si no existe lo creará.
+
+
+##find y findOne
+
+find({WHERE},{PROJECTION})
+
+Para buscar los documentos que insertemos en la base de datos podemos utilizar find() o findOne(). La diferencia es que find retorna un cursor con todos los documentos coincidentes y findOne solo un documento, si existiese más de una coincidencia será uno al azar. Si lanzamos find() sin argumentos:
+
+```
+db.people.find()
+```
+
+Obtendremos todos los documentos de la colección. Por el contrario si ejecutamos sin argumentos findOne() :
+
+```
+db.people.findOne()
+```
+
+Obtendremos un documento al azar.
+
+En la sección anterior "MongoDB Shell" ya hemos comentado algo sobre los cursores, si no estás familiarizado aún con las consultas y los cursores ahora si que te recomiendo volver atrás y practicar algunas consultas para familiarizarte con MongoDB.
+
+Podemos utilizar argumentos en find() o findOne() para buscar por una clave concreta, por ejemplo:
+
+```
+db.people.findOne({"\_id": "mjoseba@gmail.com"})
+```
+
+En este caso retornará nuestro registro y estamos seguros que no hay más ya que hemos buscado sobre la clave primaria y única.
+
+```
+{"\_id": "mjoseba@gmail.com", "name": "Joseba", "surname": "Madrigal"}
+```
+
+Si queremos buscar todos los usuarios que se llaman "Joseba" dentro de la colección: db.people.find({"name": "Joseba"})
+
+Retorna todos los usuarios llamados "Joseba".
+
+Si especificamos un segundo parámetro definiremos los campos que queremos recibir: db.people.find({"name": "Joseba"}, {"surname": true, \_id:false})
+
+Devuelve los apellidos de las personas que se llaman Joseba: {"surname": "Madrigal"}
+
+##remove
+
+```
+db.collection.remove(query, {justOne: boolean, writeConcern: document})
+```
+
+Es un borrado de múltiples documentos por defecto a no ser que se especifique justOne a true.
+
+
+##findAndModify
+
+Modifica y retorna un único documento.
+
+```
+findAndModify: <collection-name>,
+  query: <document>,
+  sort: <document>,
+  remove: <boolean>,
+  update: <document>,
+  new: <boolean>,
+  fields: <document>,
+  upsert: <boolean>
+```
+
+
+
+#Operadores
+Podemos utilizar los siguientes operadores para evaluar en nuestras consultas.
+
+- $eq     -> (Equal) Evalúa si un campo es igual al valor que se le pasa.
+-	$gt     -> (Greater than) Evalúa si un campo es mayor que el valor pasado.
+-	$gte    -> (Greater than or equal) Evalúa si un campo es mayor o igual que el valor pasado.
+-	$lt     -> (Lesser than or equal) Evalúa si un campo es menor que el valor pasado.
+-	$lte    -> (Lesser than or equal) Evalúa si un campo es menor o igual que el valor pasado.
+- $ne     -> (Not equal) Evalúa si un campo no es igual al valor.
+-	$or     -> (O)
+-	$and    -> (Y)
+-	$exists -> {exists: true} evalúa si existe(no es nulo).
+- $in     -> Evalúa si el valor se encuentra dentro del array.
+- $nin    -> (Not in) Evalúa si el valor no se encuentra dentro del array.
+- $all    -> Evalúa si todos los valores se encuentran dentro del array.
+- $mod    -> (Modulo) Aplica la operación de módulo y lo compara con el valor pasado.
+- $regex  -> Selecciona los documentos que casan con el valor de la expresión regular.
+- $text   -> Realiza una busqueda de texto.
+- $where  -> Casa con los documentos que satisfagan una expresión en JavaScript.
+
+
+Por ejemplo si queremos buscar los usuarios de 18 años:
+```
+db.people.find({ age : { $eq : 18 } } )
+```
+
+Por ejemplo si queremos buscar los usuarios mayores de 18 años y menores de 50 o de 50 en nuestra colección "people":
+
+```
+db.people.find({ age : { $gt : 18 , $lte : 50 } } )
+```
+
+Si queremos buscar los documentos con una cantidad menor que 20 o un precio de 10:
+```
+db.inventory.find( { $or: [ { quantity: { $lt: 20 } }, { price: 10 } ] } )
+```
+
+
+##Operadores especiales:
+
+###Geoespaciales
+- $geoWithin: Selecciona geometrías dentro de una geometría GeoJSON. Los índices 2dsphere y 2d soportan $geoWithin.
+- $geoIntersects: Seleccionan las geometrías con intersección en un GeoJSON. Los índices 2dsphere y 2d lo soportan.
+- $geoIntersects.
+- $near: Devuelve un objeto geoespacial en la proximidad de un punto. Require un índice geoespacial.  Los índices 2dsphere y 2d soportan $near.
+- $nearSphere: Devuelve un objeto geoespacial en la proximidad de un punto de la esfera. Require un índice geoespacial. Los índices 2dsphere y 2d soportan $nearSphere.
+
+###Array
+
+Para los campos que contienen Arrays, MongoDB proporciona los siguientes operadores:
+- $elemMatch
+- $slice
+- $.
+- $size
+
+Por ejemplo, the inventory collection contains the following document:
+```
+{ "\_id" : 1, "name" : "Joseba", "languages" : [ "JS", "PHP", "HTML" ] }
+```
+
+Si quisiéramos obtener solo los dos primeros elementos del array languages lo haríamos de la siguiente manera:
+```
+db.inventory.find( { \_id: 1 }, { languages: { $slice: 2 } } )
+```

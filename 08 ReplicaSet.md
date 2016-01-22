@@ -1,0 +1,74 @@
+#ReplicaSet
+
+La forma de lograr *alta disponibilidad* y *tolerancia a fallos* es con las *replicaSet*. Con sharding lo que se hace es partir la información en varios fragmentos por lo que lo que logramos es escalabilidad.
+
+Para crear un sistema con tolerancia a fallos y alta disponibilidad debemos crear un ReplicaSet. Vamos a plantear un esquema comun de 3 nodos de mongod (el mínimo de nodos es 3 para un ReplicaSet) funcionando con los mismos datos y trabajando en equipo.
+Hay tres tipos de nodo en los ReplicaSet:
+- Normal (Primario y Secundarios)
+- Delayed o "con retraso"
+- Arbitro
+- Oculto
+
+Los datos se escriben sobre el primario y luego se replican asincronamente en los secundarios. Los árbitros nunca pueden convertirse en primarios y unicamente entran en accion cuando el nodo primario se cae y es necesario votar para elegir un nuevo primario. Para tener un nuevo primario debes tener una mayoría estricta del numero original de nodos.
+
+Cuando un nodo se recupera vuelve como secundario.
+
+Las elecciones de nodo primario se realizan de forma transparente para el usuario.
+
+Veamos como hacer un replicaSet para lograr alta disponibilidad y tolerancia a fallo. Antes de nada debo decir que lo lógico y natural es que para lograr lo anterior debemos disponer de 3 servidores distintos ya que si los montamos sobre la misma maquina no estamos solucionando nada en el caso de que se caiga o se rompa. Aclarado eso y solo con fines educativos crearemos el replicaset sobre la misma maquina en diferentes puertos (ya sabemos que esta mal pero es solo para aprender).
+
+Lo primero vamos a especificar un nombre para nuestro replicaSet mediante:
+
+```
+mongod --replSet "rs0"
+```
+Este comando creará un replicaSet con el nombre "rs0".
+
+Ahora accedemos al shell de mongo:
+```
+mongo
+```
+
+E iniciamos el replicaSet:
+```
+rs.initiate()
+```
+
+Mediante el siguiente comando podremos ver la configuración del replicaset:
+```
+rs.conf()
+```
+
+Podemos guardarlo y editar esa información añadiendo dos miembros más tal y como puede apreciarse aquí:
+```
+{
+   "_id" : "rs0",
+   "version" : 1,
+   "members" : [
+      {
+         "_id" : 1,
+         "host" : "localhost:27017"
+      },
+      {
+         "_id" : 2,
+         "host" : "localhost:27018"
+      },
+      {
+         "_id" : 3,
+         "host" : "localhost:27019"
+      },
+   ]
+}
+```
+
+
+O también podemos añadirlos por comando:
+```
+rs.add("mongodb1.example.net")
+rs.add("mongodb2.example.net")
+```
+
+Finalmente podemos comprobar el estado de nuestra replicaSet de esta forma:
+```
+rs.status()
+```

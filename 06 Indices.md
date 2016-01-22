@@ -1,0 +1,168 @@
+#Índices
+
+##Introducción
+
+Los índices en MongoDB funcionan igual que en cualquier base de datos. Si realizamos una consulta en una base de datos sin usar índices la consulta será lenta debido a que se recorrerán todos los documentos de la colección para comprobar si se cumple la consulta. Sin embargo si disponemos de un índice, los elementos están ordenados y como sabréis no es lo mismo buscar palabras en un diccionario que en una sopa de letras... el diccionario lleva un índice alfabético en las palabras.
+
+
+##Consideraciones
+
+Cuando creas índices debes tener en cuanta lo siguiente:
+- Por defecto los \_id de todas las colecciones tienen un índice.
+- Cada índice requiere 8KB de espacio.
+- Añadir un índice tiene un impacto negativo para las operaciones de escritura. Para colecciones con alto ratio escritura>lectura, los índices son caros ya que cada inserción también debe actualizar los índices.
+- Las colecciones con alto ratio lectura>escritura a menudo se benefician de índices adicionales. Los índices no afectan al rendimiento de las lecturas que no usen índices.
+- Cada índice activo consume espacio en disco y memoria. Este uso puede ser importante y debe ser analizado para la planificación de la capacidad.
+
+
+##Ver indices
+Puedes ver todos los índices de la base de datos con la siguiente consulta:
+
+```
+db.system.indexes.find()
+```
+
+Si quieres ver los indices de una colección concreta:
+```
+db.micoleccion.getIndexes()
+```
+
+Si quisiéramos ver el tamaño de los índices de una colección:
+```
+db.micoleccion.totalIndexSize()
+```
+
+##Funcionamiento de los índices
+
+Si creamos un índice para "nombre":
+```
+db.createIndex({nombre:1})
+```
+- Las consultas sobre nombre usaran el índice.
+
+Si creamos un índice sobre "nombre" y "apellido".
+```
+db.createIndex({nombre:1, apellido:1})
+```
+- Las consultas sobre "nombre" usarán el índice.
+- Las consultas sobre "nombre" y "apellido" usarán el índice.
+- Las consultas sobre "apellido" NO usarán el índice.
+- Las consultas sobre "nombre" y "edad" usarán el índice pero solo la parte de "nombre".
+
+Puedes forzar usar un índice determinado indicando a la consulta
+.hint({campo:1})
+.hint({$natural:1}) //para no usar indice
+
+Por defecto en el log encontraremos las consultas que tardan mas de 100ms
+
+Podemos usar profiler para establecer el nivel de capturas que deseamos realizar:
+- 0 desactivado
+- 1 consultas lentas
+- 2 todas las consultas
+
+```
+db.setProfilingLevel(2)
+```
+
+```
+db.system.profile.find()
+```
+
+##Crear indices
+
+Para crear un índice:
+```
+db.micoleccion.createIndex({micampo:1})
+db.micoleccion.ensureIndex({micampo:1}) //Para versiones previas a 3.0
+```
+
+Podemos crear índices compuestos de varios campos
+```
+db.micoleccion.createIndex({{micampo:1 , orden:1})
+```
+
+###Índice unico
+```
+db.micoleccion.createIndex({{micampo:1},{unique:true})
+```
+o
+
+###Eliminar duplucados
+Si en la creación indicamos la opción dropDups:1 eliminaremos los valores duplicados.
+
+###Borrar indece:
+```
+db.micoleccion.dropIndex({micampo:1});
+```
+
+###Multikey index
+
+Si creamos un índice de un campo que es un array será un índice multikey.
+No puedes crear un índice compuesto sobre dos campos multikey, en ese caso debes crear dos índices separados.
+
+Si existe un documento con valores y creas un índice ya se considera multikey pese a que el resto de valores sean numéricos o string.
+
+Si hacemos un .explain() de una consulta y dice isMultiKey significa que usa es un índice multikey.
+
+###Sparse index
+
+Los índices creados con la opción sparse:1 generará índices solo para los campos con valor disntito de null. Es usado principalmente en conjunto con unique ya que si no disponen ese campo se considera que tienen null y hay valores duplicados.
+
+###Índices en background
+Por defecto se lanzan en foreground y son mas rápidas pero bloquean las escrituras en la misma base de datos.
+En background no bloqueará las escrituras pero será bastante más lento.
+
+Una instancia de mongod solo puede construir un índice en background por base de datos.
+Una creación de índices en background permite escrituras pero bloquea el shell.
+
+###Indices geoespaciales
+Hay dos tipos de indices geoespaciales:
+- 2D [x,y]
+- 2D Sphere [long, lat]
+
+2d
+```
+createIndex({location: "2d", type: 1})
+find({ location:{$near:[x,y]} }).limit(30)
+```
+
+spherical
+```
+createIndex({location: "2dsphere", type: 1})
+find({
+  location:{
+    $near: {
+      $geometry:{
+        type: "Point",
+        coordinates: [lat, long]
+      }
+      $maxDistance: 2000
+    }
+  }
+}).limit(30)
+```
+
+###Full text search
+```
+createIndex({mitexto: "text"})
+find({$text:{$search:{"dog"}}})
+find({$text:{$search:{"dog CAT"}}})
+```
+Hace un OR con las palabras.
+
+Podemos proyectar y ordenar por $meta:"textScore" para obtener los mejores resultados para nuestra busqueda ordenados
+
+
+
+##mongotop
+
+Muestra tiempos de lectura, escritura y totales por cada colección.
+Podemos lanzarlo con:
+```
+mongotop 5
+```
+Refrescará cada 5milisegundos
+
+##mongostat
+
+Muestra update, query delete por query. Nos dice si el índice está en memoria o no.

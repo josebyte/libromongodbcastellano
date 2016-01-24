@@ -1,12 +1,12 @@
-0. Agradecimientos
-01. Qué es
-02. Instalación
-03. Mongo Shell
-04. CRUD
-05. Modelado de datos
-06. Indices
-07. Agregation
-08. ReplicaSet
-09. Sharding
-10. DBA
-11. Bibliografia
+0. Agradecimientos.txt
+01. Que es.txt
+02. Instalación.txt
+03. Mongo Shell.txt
+04. CRUD.txt
+05. Modelado de datos.txt
+06. Indices.txt
+07. Agregation.txt
+08. ReplicaSet.txt
+09. Sharding.txt
+10. DBA.txt
+11. Bibliografia.txt

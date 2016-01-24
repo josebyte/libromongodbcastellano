@@ -1,6 +1,6 @@
 #Introducción a MongoDB
 
-#Un poco de historia
+##Un poco de historia
 
 Actualmente se escucha hablar de BigData, pero antes de comenzar hablando de grandes cantidades de datos es mejor empezar por el origen, ¿cuál es el motivo de la existencia de bases de datos para Big Data?
 
@@ -12,7 +12,7 @@ Existen tres tipos de bases de datos:
 - Bases de datos orientadas a objetos: Se han diseñado para trabajar bien en conjunción con lenguajes de programación orientados a objetos como Java, C#, Visual Basic.NET y C++. (No están muy extendidas en la actualidad.)
 - Bases de datos no-relacionales: No utilizan lenguaje SQL y están orientadas a la escalabilidad, por ejemplo MongoDB.
 
-#¿Qué es MongoDB?
+##¿Qué es MongoDB?
 
 MongoDB es una base de datos no-relacional de documentos JSON y de código abierto escrito en C++, que proporciona alto rendimiento, alta disponibilidad y escalabilidad automática.
 
@@ -22,7 +22,7 @@ El desarrollo de MongoDB comenzó en el año 2007 por la empresa 10gen3, publica
 
 Por lo tanto hemos mencionado que MongoDB es una base de datos escalable, no-relacional y orientada a documentos JSON(BSON), pero ¿qué significa no-relacional? y ¿documentos JSON(BSON)?
 
-##No-relacional
+###No-relacional
 
 No-relacional es un término nuevo que se aplica a todas las bases de datos que no son relacionales. Este tipo de base de datos también son conocidas como "no-SQL" o "Big Data".
 MongoDB tiene las siguientes características no-relacionales:
@@ -125,7 +125,7 @@ Los tipos de datos que maneja internamente BSON son los siguientes:
 
 Podemos ver BSON como un formato serializado de JSON.
 
-![Alt text](./images/esquemaBSON.jpg)
+![Alt text](./images/resources/esquemaBSON.jpg)
 
 La figura superior muestra el proceso de conversión JSON-BSON, en MongoDB los datos se almacenan en BSON y se envían en dicho formato, el encargado de realizar la conversión BSON<->JSON es el driver de Mongo de la plataforma cliente correspondiente.
 

@@ -14,6 +14,6 @@ Existe dos storage engines actualmente:
 - WiredTiger
 
 
-The storage engine directly determines:
-Format of indexes
-The data file format
+El store engine determina dos aspectos fundamentales:
+-Formato de los indices
+-El formato de datos y archivos.

@@ -125,7 +125,7 @@ Los tipos de datos que maneja internamente BSON son los siguientes:
 
 Podemos ver BSON como un formato serializado de JSON.
 
-![Alt text](https://github.com/josebyte/libromongodbcastellano/blob/master/manuscript/images/resources/esquemaBSON.jpg?raw=true)
+![Esquema BSON](images/esquemaBSON.jpg)
 
 La figura superior muestra el proceso de conversión JSON-BSON, en MongoDB los datos se almacenan en BSON y se envían en dicho formato, el encargado de realizar la conversión BSON<->JSON es el driver de Mongo de la plataforma cliente correspondiente.
 

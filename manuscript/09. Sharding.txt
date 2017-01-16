@@ -1,6 +1,6 @@
 #Sharding
 
-La forma de lograr alta disponibilidad y tolerancia a fallos es con las replicaSet. Con *sharding* lo que se hace es partir la información en varios fragmentos por lo que lo que logramos es *escalabilidad*.
+La forma de lograr alta disponibilidad y tolerancia a fallos es con las replicaSet. Con *sharding* lo que se hace es partir la información en varios fragmentos por lo que lo que logramos es *escalabilidad* horizontal.
 
 Mediante el sharding dividimos nuestros datos almacenados en Replica-Sets en diferentes servidores. El número mínimo de shards en producción es de 3. Las particiones de información se realizan basadas en rangos sobre la **shard-key**. La shard-key consiste en un campo inmutable que exista en todos los documentos de nuestra colección.
 
@@ -9,17 +9,74 @@ El sharding sirve para repartirse uniformemente la carga de trabajo de la base d
 * Escalabilidad: Permite particionar, de manera transparente para el usuario, nuestra base de datos en shards. Esto aumenta el rendimiento al ser cada una de ellas más pequeña que la original.
 * Auto balanceado de carga a través de los distintos shards. El balanceador decide cuándo migrar los datos, y a qué Shard, para que estén uniformemente distribuidos entre todos los servidores del cluster. 
 
+Imaginemos disponemos de una coleccion "pedidos" con gran cantidad de información almacenada.
+
+Disponemos de varias bases de datos y queremos repartir la información de esa coleccion "pedidos". Para ello vamos a crear shards.
+
+S1, S2, S3, S4...
+
+Cada shard contine normalmente un replicaSet. Y para gestionarlos y enrutarlos se usa "mongos". Mongos mantendra una especie de pool de conexiones de todos los hosts.
+
+En sharding se realiza una particion de datos por rango para almacenar los datos en funcion de su shard-key.
+
+Las particiones se realizan basadas en rangos sobre la shard-key.
+
+El shard-key es una clave que define el usuario para dividir los documentos en distintos servidores. Cuando establecemos un shard-key mongo dividira los valores en chunks. Esos "chunks" no dejan de ser una agrupación de datos en funcion de un campo dado.
+
+Cuando hacemos una consulta, mongod se comunica con mongos y si existe un shard que satisfaga la consulta, mira los chunks y ve donde tiene que enrutar la consulta. Por ejemplo si definimos el shard-key con pedido_id y buscamos pedido_id=100. nuestro mongos podria enrutarnos al shard s2 que contiene ese documento despues de mapear los chunks.
 
 
-Start the three config server instances. Start each by issuing a command using the following syntax:
-mongod --configsvr --dbpath <path> --port <port>
-The default port for config servers is 27019. You can specify a different port. The following example starts a config server using the default port and default data directory:
-mongod --configsvr --dbpath /data/configdb --port 27019
-For additional command options, see mongod or Configuration File Options.
+##Como elegir una shard-key correctamente
+
+- Debes asegurarte que haya suficiente cardinalidad: Suficiente variedad de valores. Seria absurdo crear una shard-key sobre un campo en el cual los valores son casi todos iguales.
+- Evitar hotspots: Evitar asignar la shard-key a campos que son monotonamente crecientes. Los chunks tiene un minkey y un maxkey. Los campos como \_id que solo crecen iran siempre al shard mas alto y no lograremos lo que estamos buscando.
+
+Supongamos que estamos buscando la shard-key para una coleccion de pedidos con order_id, order_date y vendor.
+
+¿Cual es el shard-key ideal para esta coleccion?
+
+Si deseamos seguir los consejos anteriores deberiamos descartar order_id ya que crecera monotonamente.
+
+¿Entre order_date y vendor cual es mejor shard-key?
+Si vendor tiene suficiente cardinalidad podria ser una buena elección.
+
+El order_date tiene un problema y es que normalmente se ira incrementando y podriamos tener hotspot asi que no es una gran eleccion. Vendor podria funcionar bien como shard-key.
 
 
+##Configurar shard-key
+
+Esta labor quiza este mas orientada para los DBA pero a continuación detallo como se realizaria una configuracion de shards.
+
+Creamos la carpeta donde almacenaremos la base de datos.
+```
+mkdir /data/configdb
+```
+
+Iniciamos la configuración:
+```
+mongod --configsvr --port 27000 --dbpath /data/configdb
+```
+
+Por ejemplo si disponemos de los siguientes hosts:
+
+cfg0.mishard.net
+cfg1.mishard.net
+cfg2.mishard.net
+
+Escribiremos lo siguiente para configurarlo:
+```
+mongos --configdb cfg0.mishard.net:27019,cfg1.mishard.net:27019,cfg2.mishard.net:27019
+```
+
+Nota: Cada "mongos" shard debe usar la misma configDB string con los mismos nombres de host en el mismo orden.
 
 
+##Añadir un shard al cluster
+
+Para añadir un shard al replicaSet llamado rs1 con un miembro corriendo en mongodb0.example.net:
+```
+sh.addShard( "rs1/mongodb0.example.net:27017" )
+```
 
 
 Notas:
@@ -28,90 +85,3 @@ Notas:
 - Es importante que todas las instancias de servidor tengan acceso al resto de instancias por lo que la configuracion del firewall y la red debe realizarse correctamente.
 - Por defecto cada servidor almacena la información en: /data/configdb
 - Por defecto mongos se ejecuta en el puerto 27017.
-
-
-
-
-
-
-When you start the mongos instance, specify the hostnames of the three config servers, either in the configuration file or as command line parameters.
-
-TIP
-To avoid downtime, give each config server a logical DNS name (unrelated to the server’s physical or virtual hostname). Without logical DNS names, moving or renaming a config server requires shutting down every mongod and mongos instance in the sharded cluster.
-To start a mongos instance, issue a command using the following syntax:
-
-mongos --configdb <config server hostnames>
-For example, to start a mongos that connects to config server instance running on the following hosts and on the default ports:
-
-cfg0.example.net
-cfg1.example.net
-cfg2.example.net
-You would issue the following command:
-
-mongos --configdb cfg0.example.net:27019,cfg1.example.net:27019,cfg2.example.net:27019
-Each mongos in a sharded cluster must use the same configDB string, with identical host names listed in identical order.
-
-If you start a mongos instance with a string that does not exactly match the string used by the other mongos instances in the cluster, the mongos return a Config Database String Error error and refuse to start.
-
-Add Shards to the Cluster
-
-A shard can be a standalone mongod or a replica set. In a production environment, each shard should be a replica set. Use the procedure in Deploy a Replica Set to deploy replica sets for each shard.
-
-From a mongo shell, connect to the mongos instance. Issue a command using the following syntax:
-mongo --host <hostname of machine running mongos> --port <port mongos listens on>
-For example, if a mongos is accessible at mongos0.example.net on port 27017, issue the following command:
-mongo --host mongos0.example.net --port 27017
-Add each shard to the cluster using the sh.addShard() method, as shown in the examples below. Issue sh.addShard() separately for each shard. If the shard is a replica set, specify the name of the replica set and specify a member of the set. In production deployments, all shards should be replica sets.
-OPTIONAL
-You can instead use the addShard database command, which lets you specify a name and maximum size for the shard. If you do not specify these, MongoDB automatically assigns a name and maximum size. To use the database command, see addShard.
-The following are examples of adding a shard with sh.addShard():
-To add a shard for a replica set named rs1 with a member running on port 27017 on mongodb0.example.net, issue the following command:
-sh.addShard( "rs1/mongodb0.example.net:27017" )
-Changed in version 2.0.3.
-
-For MongoDB versions prior to 2.0.3, you must specify all members of the replica set. For example:
-sh.addShard( "rs1/mongodb0.example.net:27017,mongodb1.example.net:27017,mongodb2.example.net:27017" )
-To add a shard for a standalone mongod on port 27017 of mongodb0.example.net, issue the following command:
- sh.addShard( "mongodb0.example.net:27017" )
-NOTE
-It might take some time for chunks to migrate to the new shard.
-Enable Sharding for a Database
-
-Before you can shard a collection, you must enable sharding for the collection’s database. Enabling sharding for a database does not redistribute data but make it possible to shard the collections in that database.
-
-Once you enable sharding for a database, MongoDB assigns a primary shard for that database where MongoDB stores all data before sharding begins.
-
-From a mongo shell, connect to the mongos instance. Issue a command using the following syntax:
-mongo --host <hostname of machine running mongos> --port <port mongos listens on>
-Issue the sh.enableSharding() method, specifying the name of the database for which to enable sharding. Use the following syntax:
-sh.enableSharding("<database>")
-Optionally, you can enable sharding for a database using the enableSharding command, which uses the following syntax:
-
-db.runCommand( { enableSharding: <database> } )
-Enable Sharding for a Collection
-
-You enable sharding on a per-collection basis.
-
-Determine what you will use for the shard key. Your selection of the shard key affects the efficiency of sharding. See the selection considerations listed in the Considerations for Selecting Shard Key.
-If the collection already contains data you must create an index on the shard key using createIndex(). If the collection is empty then MongoDB will create the index as part of the sh.shardCollection() step.
-Enable sharding for a collection by issuing the sh.shardCollection() method in the mongo shell. The method uses the following syntax:
-sh.shardCollection("<database>.<collection>", shard-key-pattern)
-Replace the <database>.<collection> string with the full namespace of your database, which consists of the name of your database, a dot (e.g. .), and the full name of the collection. The shard-key-pattern represents your shard key, which you specify in the same form as you would an index key pattern.
-EXAMPLE
-The following sequence of commands shards four collections:
-
-sh.shardCollection("records.people", { "zipcode": 1, "name": 1 } )
-sh.shardCollection("people.addresses", { "state": 1, "_id": 1 } )
-sh.shardCollection("assets.chairs", { "type": 1, "_id": 1 } )
-sh.shardCollection("events.alerts", { "_id": "hashed" } )
-In order, these operations shard:
-The people collection in the records database using the shard key { "zipcode": 1, "name": 1 }.
-This shard key distributes documents by the value of the zipcode field. If a number of documents have the same value for this field, then that chunk will be splittable by the values of the name field.
-The addresses collection in the people database using the shard key { "state": 1, "_id": 1 }.
-This shard key distributes documents by the value of the state field. If a number of documents have the same value for this field, then that chunk will be splittable by the values of the _id field.
-The chairs collection in the assets database using the shard key { "type": 1, "_id": 1 }.
-This shard key distributes documents by the value of the type field. If a number of documents have the same value for this field, then that chunk will be splittable by the values of the _id field.
-The alerts collection in the events database using the shard key { "_id": "hashed" }.
-New in version 2.4.
-
-This shard key distributes documents by a hash of the value of the _id field. MongoDB computes the hash of the _id field for the hashed index, which should provide an even distribution of documents across a cluster.

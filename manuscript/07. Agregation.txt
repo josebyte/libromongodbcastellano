@@ -36,6 +36,7 @@ $group: {
 - $sum es una expresión que suma 1 por cada documento.
 
 La agregación usa un pipeline, y cada una de estas fases pueden aparecer más de una vez en el pipeline:
+
 - $project -> remodela el documento seleccionando los campos deseados o trayéndolos de lo más profundo a lo más alto. 1-1
 - $match -> filtra. n-1
 - $group -> puedes sumar contar y agrupar por determinado campo. n-1.

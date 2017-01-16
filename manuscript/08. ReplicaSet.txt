@@ -4,6 +4,7 @@ La forma de lograr *alta disponibilidad* y *tolerancia a fallos* es con las *rep
 
 Para crear un sistema con tolerancia a fallos y alta disponibilidad debemos crear un ReplicaSet. Vamos a plantear un esquema comun de 3 nodos de mongod (el mínimo de nodos es 3 para un ReplicaSet) funcionando con los mismos datos y trabajando en equipo.
 Hay tres tipos de nodo en los ReplicaSet:
+
 - Normal (Primario y Secundarios)
 - Delayed o "con retraso"
 - Arbitro

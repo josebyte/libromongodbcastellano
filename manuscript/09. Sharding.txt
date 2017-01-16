@@ -1,39 +1,38 @@
 #Sharding
 
-La forma de lograr alta disponibilidad y tolerancia a fallos es con las replicaSet. Con *sharding* lo que haces es partir la información en varios fragmentos por lo que lo que logramos es *escalabilidad*.
+La forma de lograr alta disponibilidad y tolerancia a fallos es con las replicaSet. Con *sharding* lo que se hace es partir la información en varios fragmentos por lo que lo que logramos es *escalabilidad*.
 
-Las particiones se realizan basadas en rangos sobre la shard-key.
+Mediante el sharding dividimos nuestros datos almacenados en Replica-Sets en diferentes servidores. El número mínimo de shards en producción es de 3. Las particiones de información se realizan basadas en rangos sobre la **shard-key**. La shard-key consiste en un campo inmutable que exista en todos los documentos de nuestra colección.
 
+El sharding sirve para repartirse uniformemente la carga de trabajo de la base de datos, permitiendo escalar y manejar grandes cantidades de datos.
 
-
-
-
-
-
+* Escalabilidad: Permite particionar, de manera transparente para el usuario, nuestra base de datos en shards. Esto aumenta el rendimiento al ser cada una de ellas más pequeña que la original.
+* Auto balanceado de carga a través de los distintos shards. El balanceador decide cuándo migrar los datos, y a qué Shard, para que estén uniformemente distribuidos entre todos los servidores del cluster. 
 
 
 
-
-
-
-The config server processes are mongod instances that store the cluster’s metadata. You designate a mongod as a config server using the --configsvr option. Each config server stores a complete copy of the cluster’s metadata.
-
-In production deployments, you must deploy exactly three config server instances, each running on different servers to assure good uptime and data safety. In test environments, you can run all three instances on a single server.
-
-IMPORTANT
-All members of a sharded cluster must be able to connect to all other members of a sharded cluster, including all shards and all config servers. Ensure that the network and security systems including all interfaces and firewalls, allow these connections.
-Create data directories for each of the three config server instances. By default, a config server stores its data files in the /data/configdb directory. You can choose a different location. To create a data directory, issue a command similar to the following:
-mkdir /data/configdb
 Start the three config server instances. Start each by issuing a command using the following syntax:
 mongod --configsvr --dbpath <path> --port <port>
 The default port for config servers is 27019. You can specify a different port. The following example starts a config server using the default port and default data directory:
 mongod --configsvr --dbpath /data/configdb --port 27019
 For additional command options, see mongod or Configuration File Options.
-NOTE
-All config servers must be running and available when you first initiate a sharded cluster.
-Start the mongos Instances
 
-The mongos instances are lightweight and do not require data directories. You can run a mongos instance on a system that runs other cluster components, such as on an application server or a server running a mongod process. By default, a mongos instance runs on port 27017.
+
+
+
+
+
+Notas:
+
+- En entornos de producción se debe ejecutar cada una de las instancias de servidor en un servidor distinto para garantizar una respuesta rápida y seguridad. Con fines de testing es posible configurar cada shard en el mismo servidor.
+- Es importante que todas las instancias de servidor tengan acceso al resto de instancias por lo que la configuracion del firewall y la red debe realizarse correctamente.
+- Por defecto cada servidor almacena la información en: /data/configdb
+- Por defecto mongos se ejecuta en el puerto 27017.
+
+
+
+
+
 
 When you start the mongos instance, specify the hostnames of the three config servers, either in the configuration file or as command line parameters.
 

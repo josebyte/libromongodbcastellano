@@ -27,6 +27,7 @@ Por lo tanto hemos mencionado que MongoDB es una base de datos escalable, no-rel
 
 No-relacional es un término nuevo que se aplica a todas las bases de datos que no son relacionales. Este tipo de base de datos también son conocidas como "no-SQL" o "Big Data".
 MongoDB tiene las siguientes características no-relacionales:
+
 * No-SQL.
 * No tiene JOINs.
 * No tiene esquema.
@@ -98,6 +99,7 @@ Puedes ver más información en [BSONspec](http://bsonspec.org). BSON extiende d
 2. Tipos de datos
 
 JSON proporciona únicamente 6 tipos de dato:
+
 * String
 * Number
 * booleans
@@ -106,6 +108,7 @@ JSON proporciona únicamente 6 tipos de dato:
 * objetos / documentos
 
 Los tipos de datos que maneja internamente BSON son los siguientes:
+
 * Double
 * String
 * Object
@@ -133,6 +136,7 @@ La figura superior muestra el proceso de conversión JSON-BSON, en MongoDB los d
 En el proceso de consulta de un documento el servidor de MongoDB nos sirve un BSON y nuestra APP a través del driver de Mongodb transforma el BSON a JSON. Cuando enviamos información de nuestra APP al servidor enviamos un JSON y el driver es el encargado de convertirlo a BSON para su envío. Todo este proceso se realiza de forma transparente.
 
 Los nombres de los campos tienen las siguientes limitaciones:
+
 * El nombre de campo \_id está reservado para la primary key; debe ser único e inmutable, y puede ser de cualquier tipo excepto array.
 * Los nombres no pueden empezar por el signo dólar ($).
 * Los nombres no pueden contener punto (.).

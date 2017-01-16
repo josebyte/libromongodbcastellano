@@ -8,11 +8,12 @@ Los índices en MongoDB funcionan igual que en cualquier base de datos. Si reali
 ##Consideraciones
 
 Cuando creas índices debes tener en cuanta lo siguiente:
-- Por defecto los \_id de todas las colecciones tienen un índice.
-- Cada índice requiere 8KB de espacio.
-- Añadir un índice tiene un impacto negativo para las operaciones de escritura. Para colecciones con alto ratio escritura>lectura, los índices son caros ya que cada inserción también debe actualizar los índices.
-- Las colecciones con alto ratio lectura>escritura a menudo se benefician de índices adicionales. Los índices no afectan al rendimiento de las lecturas que no usen índices.
-- Cada índice activo consume espacio en disco y memoria. Este uso puede ser importante y debe ser analizado para la planificación de la capacidad.
+
+* Por defecto los \_id de todas las colecciones tienen un índice.
+* Cada índice requiere 8KB de espacio.
+* Añadir un índice tiene un impacto negativo para las operaciones de escritura. Para colecciones con alto ratio escritura>lectura, los índices son caros ya que cada inserción también debe actualizar los índices.
+* Las colecciones con alto ratio lectura>escritura a menudo se benefician de índices adicionales. Los índices no afectan al rendimiento de las lecturas que no usen índices.
+* Cada índice activo consume espacio en disco y memoria. Este uso puede ser importante y debe ser analizado para la planificación de la capacidad.
 
 
 ##Ver indices
@@ -44,10 +45,10 @@ Si creamos un índice sobre "nombre" y "apellido".
 ```
 db.createIndex({nombre:1, apellido:1})
 ```
-- Las consultas sobre "nombre" usarán el índice.
-- Las consultas sobre "nombre" y "apellido" usarán el índice.
-- Las consultas sobre "apellido" NO usarán el índice.
-- Las consultas sobre "nombre" y "edad" usarán el índice pero solo la parte de "nombre".
+* Las consultas sobre "nombre" usarán el índice.
+* Las consultas sobre "nombre" y "apellido" usarán el índice.
+* Las consultas sobre "apellido" NO usarán el índice.
+* Las consultas sobre "nombre" y "edad" usarán el índice pero solo la parte de "nombre".
 
 Puedes forzar usar un índice determinado indicando a la consulta
 .hint({campo:1})
@@ -56,9 +57,9 @@ Puedes forzar usar un índice determinado indicando a la consulta
 Por defecto en el log encontraremos las consultas que tardan mas de 100ms
 
 Podemos usar profiler para establecer el nivel de capturas que deseamos realizar:
-- 0 desactivado
-- 1 consultas lentas
-- 2 todas las consultas
+* 0 desactivado
+* 1 consultas lentas
+* 2 todas las consultas
 
 ```
 db.setProfilingLevel(2)
@@ -117,8 +118,8 @@ Una creación de índices en background permite escrituras pero bloquea el shell
 
 ###Indices geoespaciales
 Hay dos tipos de indices geoespaciales:
-- 2D [x,y]
-- 2D Sphere [long, lat]
+* 2D [x,y]
+* 2D Sphere [long, lat]
 
 2d
 ```

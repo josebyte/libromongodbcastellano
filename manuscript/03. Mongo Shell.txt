@@ -2,9 +2,10 @@
 
 En la carpeta donde tenemos instalado MongoDB hay una carpeta "bin", en ella encontraremos todos los ejecutables de MongoDB. 
 Los más usados son:
-- mongod: es el demonio de base de datos, debemos ejecutarlo y dejarlo en ejecución para poder lanzar consultas y trabajar.
-- mongo: es el shell desde el cual  lanzaremos las consultas.
-- mongos: es un servicio de routing de MongoDB Shard.
+
+* mongod: es el demonio de base de datos, debemos ejecutarlo y dejarlo en ejecución para poder lanzar consultas y trabajar.
+* mongo: es el shell desde el cual  lanzaremos las consultas.
+* mongos: es un servicio de routing de MongoDB Shard.
 
 Por lo que si no tienes ya iniciado mongod lo primero es iniciarlo con:
 ```
@@ -54,8 +55,9 @@ El comando anterior ampliará el tiempo máximo de "micursor" a 20 mininutos (el
 
 
 Para imprimir un documento JSON de forma más "bonita" tenemos las siguientes opciones:
-- .pretty() Al final de una consulta
-- printjson() == print(tojson()) Para imprimir variables.
+
+* .pretty() Al final de una consulta
+* printjson() == print(tojson()) Para imprimir variables.
 
 Si queremos almacenar un array en una variable:
 ```

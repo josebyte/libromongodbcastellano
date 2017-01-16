@@ -1,10 +1,11 @@
 #CRUD
 
 Las operaciones CRUD (Create, Read, Update, Delete) existen en Mongodb en forma de funciones. No se puede usar SQL, se utilizan las funciones o métodos que nos proporciona MongoDB.
--	C(create) -> insert, save, update(upsert)
--	R(read)   -> find, findOne
--	U(update) -> update, save
--	D(delete) -> remove
+
+* C(create) -> insert, save, update(upsert)
+* R(read)   -> find, findOne
+* U(update) -> update, save
+* D(delete) -> remove
 
 
 ##Insert
@@ -187,14 +188,14 @@ findAndModify: <collection-name>,
 Podemos utilizar los siguientes operadores para evaluar en nuestras consultas.
 
 - $eq     -> (Equal) Evalúa si un campo es igual al valor que se le pasa.
--	$gt     -> (Greater than) Evalúa si un campo es mayor que el valor pasado.
--	$gte    -> (Greater than or equal) Evalúa si un campo es mayor o igual que el valor pasado.
--	$lt     -> (Lesser than or equal) Evalúa si un campo es menor que el valor pasado.
--	$lte    -> (Lesser than or equal) Evalúa si un campo es menor o igual que el valor pasado.
+- $gt     -> (Greater than) Evalúa si un campo es mayor que el valor pasado.
+- $gte    -> (Greater than or equal) Evalúa si un campo es mayor o igual que el valor pasado.
+- $lt     -> (Lesser than or equal) Evalúa si un campo es menor que el valor pasado.
+- $lte    -> (Lesser than or equal) Evalúa si un campo es menor o igual que el valor pasado.
 - $ne     -> (Not equal) Evalúa si un campo no es igual al valor.
--	$or     -> (O)
--	$and    -> (Y)
--	$exists -> {exists: true} evalúa si existe(no es nulo).
+- $or     -> (O)
+- $and    -> (Y)
+- $exists -> {exists: true} evalúa si existe(no es nulo).
 - $in     -> Evalúa si el valor se encuentra dentro del array.
 - $nin    -> (Not in) Evalúa si el valor no se encuentra dentro del array.
 - $all    -> Evalúa si todos los valores se encuentran dentro del array.
@@ -233,10 +234,11 @@ db.inventory.find( { $or: [ { quantity: { $lt: 20 } }, { price: 10 } ] } )
 ###Array
 
 Para los campos que contienen Arrays, MongoDB proporciona los siguientes operadores:
-- $elemMatch
-- $slice
-- $.
-- $size
+
+* $elemMatch
+* $slice
+* $.
+* $size
 
 Por ejemplo, the inventory collection contains the following document:
 ```

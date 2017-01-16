@@ -47,6 +47,7 @@ La agregación usa un pipeline, y cada una de estas fases pueden aparecer más d
 - $out -> redirigir la salida a otra coleccion en lugar de a un cursor (por defecto) 1-1
 
 Expresiones:
+
 - $sum
 - $avg
 - $min

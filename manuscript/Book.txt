@@ -8,5 +8,4 @@
 07. Agregation.txt
 08. ReplicaSet.txt
 09. Sharding.txt
-10. DBA.txt
-11. Bibliografia.txt
+10. Bibliografia.txt

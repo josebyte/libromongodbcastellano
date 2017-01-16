@@ -4,16 +4,19 @@
 
 El store engine es una capa entre la Base de datos y el hardware.
 El store engine define:
--Como se guardan los datos en disco.
--Como se borra la información de disco.
--Como se lee la información de disco.
--Las estructuras que se usan para almecenar los daots.
+
+- Como se guardan los datos en disco.
+- Como se borra la información de disco.
+- Como se lee la información de disco.
+- Las estructuras que se usan para almecenar los daots.
 
 Existe dos storage engines actualmente:
+
 - MMAP v1
 - WiredTiger
 
 
 El store engine determina dos aspectos fundamentales:
--Formato de los indices
--El formato de datos y archivos.
+
+- Formato de los indices
+- El formato de datos y archivos.

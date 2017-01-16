@@ -1,6 +1,6 @@
 0. Agradecimientos.txt
 01. Que es.txt
-02. Instalación.txt
+02. Instalacion.txt
 03. Mongo Shell.txt
 04. CRUD.txt
 05. Modelado de datos.txt

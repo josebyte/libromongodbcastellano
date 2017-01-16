@@ -8,6 +8,7 @@ Desde el origen de la informática ha existido la necesidad de almacenar informa
 
 Debido a esas limitaciones surgieron las bases de datos que se utilizan actualmente.
 Existen tres tipos de bases de datos:
+
 * Bases de datos relacionales: Hasta la actualidad son las más usadas, utilizan SQL. Por ejemplo: Oracle, MS SQL Server, MySQL o MariaDB son bases de datos relacionales.
 * Bases de datos orientadas a objetos: Se han diseñado para trabajar bien en conjunción con lenguajes de programación orientados a objetos como Java, C#, Visual Basic.NET y C++. (No están muy extendidas en la actualidad.)
 * Bases de datos no-relacionales: No utilizan lenguaje SQL y están orientadas a la escalabilidad, por ejemplo MongoDB.

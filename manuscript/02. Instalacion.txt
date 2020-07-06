@@ -1,6 +1,7 @@
 #Instalación
 
 MongoDB está disponible para:
+
 - Windows
 - Mac
 - Linux
@@ -9,30 +10,28 @@ En la documentación oficial de MongoDB se indica como instalar MongoDB en cada 
 
 ##Instalación en Windows
 
-Debemos descargarnos la versión correcta (64 o 32 bits) de la [web oficial](http://www.mongodb.org/downloads) de MongoDB.
+Debemos descargarnos la versión "community" correcta (64 o 32 bits) de la [web oficial](https://www.mongodb.com/try/download/community) de MongoDB.
 
-La extensión del archivo descargado es ".msi" y haciendo doble click comenzará la instalación.
+Se puede elegir si descargar un zip o un archivo de instalación con la extensión ".msi", sobre el que haciendo doble click comenzará la instalación.
 
-Para configurar el entorno es necesario definir el directorio donde guardará MongoDB los datos. Por defecto es "c:\data\db"`
+Debemos hacer click en "I accept the terms in the LIcense Agreement" y a continuación hacer click "Next".
 
-```
-md \data\db
-```
+Debemos hacer click en "Complete".
 
-Es posible especificar otra ruta mediante el siguiente comando:
+A continuación nos pregunta por el nombre del servicio y los directorios donde se ubicara la base de datos, los podemos mantener con los valores por defecto.
 
-```
-C:\mongodb\bin\mongod.exe --dbpath "d:\test\mongodb\data"
-```
+En la siguiente pantalla por defecto podemos ver en la parte inferior un check, lo mantendremos checheado tal y como viene por defecto para instalar tambien el GUI de MongoDb Compass.
 
-Ahora debemos definir las variables de entorno en el sistema operativo:
+Para configurar el entorno es necesario definir el directorio donde guardará MongoDB los datos. Por defecto es "c:\Program Files\MongoDb\Server\4.2\data"`
+
+Una vez finializada la instalación debemos definir las variables de entorno en el sistema operativo:
 
 1. Panel de control
 2. Sistema
 3. Configuración avanzada
 4. Variables de entorno
 5. Bajo "Variables de sistema" busca "Path" y haz doble click en el.
-6. En el valor "Variable" de esa fila seleccionada debemos añadir al final ; si no existe y añadir la ruta de instalacion de MongoDb:
+6. En el valor "Variable" de esa fila seleccionada debemos añadir al final ; si no existe y añadir la ruta de instalación de MongoDb:
 Por ejemplo yo he añadido al final:
 
 ```
@@ -49,22 +48,21 @@ Existen dos formas de instalar en OSX MongoDB:
 
 ```
 brew update
-brew install mongodb
+brew install mongodb-community@4.2
+```
+
+Si instalamos desde homebrew debemos iniciar el servicio de Mongo de la siguiente manera:
+
+```
+brew services start mongodb-community@4.2
 ```
 
 ###Instalar en OSX manualmente
 
-Debemos descargarnos los binarios desde [web oficial](http://www.mongodb.org/downloads) .
+Debemos descargarnos los binarios desde [web oficial](https://www.mongodb.com/try/download/community) .
 
-Descomprimimos el paquete descargado:
-```
-tar -zxvf mongodb-osx-x86_64-3.0.2.tgz
-```
-Copiamos la carpeta descomprimida a la localización desde la que lanzaremos MongoDB:
-```
-mkdir -p mongodb
-cp -R -n mongodb-osx-x86_64-3.0.2/ mongodb
-```
+Descomprimimos el paquete descargado en nuestra carpeta home.
+
 Los archivos binarios de MongoDB se encuentran en el directorio bin/
 Para agregar los binarios al PATH:
 ```
@@ -75,17 +73,19 @@ Reemplazar <mongodb-install-directory> con la ruta de nuestra carpeta de Mongodb
 
 ##Instalación en Linux
 
-Debemos descargarnos los binarios desde [web oficial](http://www.mongodb.org/downloads) .
+Dependiendo de la distribución de Linux la instalación es diferente, puedes ver como instalarlo en su [documentación oficial](https://docs.mongodb.com/manual/administration/install-on-linux/) o instalar los binarios directamente como muestro a continuación:
+
+Debemos descargarnos los binarios desde [web oficial](https://www.mongodb.com/try/download/community) .
 
 Descomprimimos el paquete descargado:
 ```
-tar -zxvf mongodb-linux-x86_64-3.0.2.tgz
+tar -zxvf mongodb-linux-x86_64-4.2.8.tgz
 ```
 
 Copiamos la carpeta descomprimida a la localización desde la que lanzaremos MongoDB:
 ```
 mkdir -p mongodb
-cp -R -n mongodb-linux-x86_64-3.0.2/ mongodb
+cp -R -n mongodb-linux-x86_64-4.2.8/ mongodb
 ```
 
 Los archivos binarios de MongoDB se encuentran en el directorio bin/
@@ -100,3 +100,13 @@ Antes de iniciar mongod creamos la carpeta donde se encontrarán las bases de da
 ```
 mkdir -p /data/db
 ```
+
+##Comprobación
+
+Una vez finalizada la instalación abrimos un terminal y escribimos:
+
+```
+mongo --nodb
+```
+
+Entraremos en el shell de Mongo y veremos la versión con la que estamos trabajando. Por ejemplo: MongoDB shell version v4.2.8

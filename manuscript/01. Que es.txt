@@ -4,22 +4,23 @@
 
 Actualmente se escucha hablar de BigData, pero antes de comenzar hablando de grandes cantidades de datos es mejor empezar por el origen, ¿cuál es el motivo de la existencia de bases de datos para Big Data?
 
-Desde el origen de la informática ha existido la necesidad de almacenar información de forma permanente. Con el término permanente se hace alusión a datos almacenados en un medio físico como un disco duro ,(la memoria RAM no es almacenamiento permanente), la cual puede ser leída posteriormente incluso despues de apagar y encender el equipo. Inicialmente se guardaban los datos en ficheros de texto, pero pronto surgieron limitaciones, es un método poco eficaz, ¿qué ocurre si cambiamos la estructura de los datos? ¿y si cambiamos algunos datos? ¿inconsistencias?... Por ello surgieron las bases de datos históricas como las jerárquicas, en red o transaccionales. Estas bases de datos se siguen estudiando actualmente en las universidades pero ya no son utilizadas debido a sus limitaciones: Complejidad, duplicidad de registros, Integridad referencial, (No existe garantía de que un registro hijo esté relacionado con un registro padre válido), Desnormalización...
+Desde el origen de la informática ha existido la necesidad de almacenar información de forma permanente. Con el término permanente se hace alusión a datos almacenados en un medio físico como un disco duro (la memoria RAM no es almacenamiento permanente), la cual puede ser leída posteriormente incluso después de apagar y encender el equipo. Inicialmente se guardaban los datos en ficheros de texto, pero pronto surgieron limitaciones, es un método poco eficaz, ¿qué ocurre si cambiamos la estructura de los datos? ¿y si cambiamos algunos datos? ¿inconsistencias?...
+Por ello surgieron las bases de datos históricas como las jerárquicas, en red o transaccionales.
+Estas bases de datos se siguen estudiando actualmente en las universidades pero ya no son utilizadas debido a sus limitaciones: Complejidad, duplicidad de registros, Integridad referencial (no existe garantía de que un registro hijo esté relacionado con un registro padre válido), desnormalización...
 
-Debido a esas limitaciones surgieron las bases de datos que se utilizan actualmente.
-Existen tres tipos de bases de datos:
+Debido a esas limitaciones surgieron las bases de datos que se utilizan actualmente. Existen tres tipos de bases de datos:
 
-* Bases de datos relacionales: Hasta la actualidad son las más usadas, utilizan SQL. Por ejemplo: Oracle, MS SQL Server, MySQL o MariaDB son bases de datos relacionales.
-* Bases de datos orientadas a objetos: Se han diseñado para trabajar bien en conjunción con lenguajes de programación orientados a objetos como Java, C#, Visual Basic.NET y C++. (No están muy extendidas en la actualidad.)
+* Bases de datos relacionales: Hasta la actualidad son las más usadas, utilizan SQL. Por ejemplo: Oracle, MS SQL Server, MySQL o MariaDB son las bases de datos relacionales más usadas en todo el mundo.
+* Bases de datos orientadas a objetos: Se han diseñado para trabajar bien en conjunción con lenguajes de programación orientados a objetos como Java, C#, Visual Basic.NET y C++. Actualmente no están muy extendidas.
 * Bases de datos no-relacionales: No utilizan lenguaje SQL y están orientadas a la escalabilidad, por ejemplo MongoDB.
 
 ##¿Qué es MongoDB?
 
 MongoDB es una base de datos no-relacional de documentos JSON y de código abierto escrito en C++, que proporciona alto rendimiento, alta disponibilidad y escalabilidad automática.
 
-El concepto de escalabilidad está totalmente ligado con "Big data" debido a que cuando se trabaja con grandes cantidades de datos, en otros tipos de bases de datos es complejo y costoso de gestionar. Las bases de datos como MongoDb proporcionan escalabilidad automática, lo cual hace que esta base de datos sea idonea para grandes cantidades crecientes de información.
+El concepto de escalabilidad está totalmente ligado con "Big data" debido a que cuando se trabaja con grandes cantidades de datos, en otros tipos de bases de datos es complejo y costoso de gestionar. Las bases de datos como MongoDb proporcionan escalabilidad automática, lo cual hace que esta base de datos sea idónea para grandes cantidades crecientes de información.
 
-El desarrollo de MongoDB comenzó en el año 2007 por la empresa 10gen3, publicando una versión final en el 2009 y actualmente se encuentra en la versión 3.0.
+El desarrollo de MongoDB comenzó en el año 2007 por la empresa 10gen3, publicando una versión final en el 2009 y actualmente se encuentra en la versión 4.2.
 
 Por lo tanto hemos mencionado que MongoDB es una base de datos escalable, no-relacional y orientada a documentos JSON(BSON), pero ¿qué significa no-relacional? y ¿documentos JSON(BSON)?
 
@@ -32,7 +33,7 @@ MongoDB tiene las siguientes características no-relacionales:
 * No tiene JOINs.
 * No tiene esquema.
 * Escala horizontalmente.
-* No tiene transacciones atómicas para multiples documentos.
+* No tiene transacciones atómicas para múltiples documentos.
 
 ###No-SQL
 MongoDB no usa SQL como lenguaje de consultas, en su lugar dispone de una serie de métodos en JavaScript que permiten realizar consultas y operaciones.
@@ -41,14 +42,14 @@ MongoDB no usa SQL como lenguaje de consultas, en su lugar dispone de una serie 
 En MongoDB no se puede hacer una relación entre dos colecciones, no existen las "join" del mundo SQL. La razón es que MongoDB está orientado a ser escalable y las join de las bases de datos relacionales escalan muy mal.
 
 ###Sin esquema
-Una misma colección (en sql: "colección"=="tabla") de documentos puede contener documentos con distinto formato, a esto se le llama "schemeless" o "sin esquema". Es decir podremos tener ,por ejemplo, una colección de usuarios en donde guardemos datos diferentes para cada usuario. A esa capacidad le llamamos polimorfismo.
+Una misma colección (en sql: "colección"=="tabla") de documentos puede contener documentos con distinto formato, a esto se le llama "schemeless" o "sin esquema". Es decir podremos tener, por ejemplo, una colección de usuarios en donde guardemos datos diferentes para cada usuario. A esa capacidad le llamamos polimorfismo.
 
 ###Escalabilidad horizontal
 Uno de los motivos más importantes por el que se han creado las bases de datos no-relacionales es por la escalabilidad. Actualmente cada vez más nos encontramos con gran cantidad de datos en diferentes servidores. Las bases de datos relacionales son lentas y poco escalables en esos casos, no están pensadas para que la información almacenada sea muy grande y se encuentre distribuida, por ello ha surgido MongoDB. Este sistema de base de datos tiene la capacidad de escalar horizontalmente correcta y fácilmente sin penalización. Un sistema escala horizontalmente bien si al agregar más nodos al mismo, el rendimiento de éste mejora.
 Quizá ahora entiendas un poco mejor el término que comentamos anteriormente que se usa para estas bases de datos, están diseñadas para grandes cantidades de información, por ese motivo son conocidas también como bases de datos de "Big Data".
 
 ###Sin transacciones multi-documento
-MongoDB solo garantiza atomicidad en el propio documento. ¿Que es la atomicidad? Según Wikipedia: "La atomicidad es la propiedad que asegura que una operación se ha realizado o no, y por lo tanto ante un fallo del sistema no puede quedar a medias".
+MongoDB solo garantiza atomicidad en el propio documento. ¿Qué es la atomicidad? Según Wikipedia: "La atomicidad es la propiedad que asegura que una operación se ha realizado o no, y por lo tanto ante un fallo del sistema no puede quedar a medias".
 
 Imaginemos que estamos desarrollando la aplicación de un banco, dispondremos de diferentes cuentas para cada usuario y existirán transferencias de dinero de una cuenta a otra. Las bases de datos relacionales aseguran que si solicitamos restar de una cuenta y añadir a otra ésta sea una operación atómica que no puede quedar a medias, o se hacen las dos operaciones(resta de una cuenta y suma a la otra) o no se hace ninguna.
 
@@ -94,7 +95,8 @@ JSON es un estándar y puedes saber más en [JSON.org](http://json.org)
 
 Pese a que nosotros a priori en MongoDB usemos documentos en formato JSON, MongoDB trabaja internamente con BSON (JSON Binario). Un BSON no es más que la representación binaria de un documento JSON.
 
-Puedes ver más información en [BSONspec](http://bsonspec.org). BSON extiende del modelo JSON para proporcionar "tipos de datos" para una correcta codificacion y decodificación en los diferentes lenguajes. Por lo tanto BSON proporciona a MongoDB dos capacidades:
+Puedes ver más información en [BSONspec](http://bsonspec.org). BSON extiende del modelo JSON para proporcionar "tipos de datos" para una correcta codificación y decodificación en los diferentes lenguajes. Por lo tanto BSON proporciona a MongoDB dos capacidades:
+
 1. Rápida escaneabilidad
 2. Tipos de datos
 
@@ -114,13 +116,13 @@ Los tipos de datos que maneja internamente BSON son los siguientes:
 * Object
 * Array
 * Binary data
-* Undefined (Deprecated)
+* Undefined (deprecated)
 * Object id
 * Boolean
 * Date
 * Null
 * Regular Expression
-* JavaScript Symbol JavaScript (with scope)
+* JavaScript Symbol JavaScript (con scope)
 * 32-bit integer
 * Timestamp
 * 64-bit integer
@@ -140,4 +142,4 @@ Los nombres de los campos tienen las siguientes limitaciones:
 * El nombre de campo \_id está reservado para la primary key; debe ser único e inmutable, y puede ser de cualquier tipo excepto array.
 * Los nombres no pueden empezar por el signo dólar ($).
 * Los nombres no pueden contener punto (.).
-* Los nombres no pueden contener el caracter null.
+* Los nombres no pueden contener el carácter null.

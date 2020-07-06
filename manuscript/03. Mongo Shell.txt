@@ -1,11 +1,11 @@
 #Mongo Shell
 
-En la carpeta donde tenemos instalado MongoDB hay una carpeta "bin", en ella encontraremos todos los ejecutables de MongoDB. 
-Los más usados son:
+En la carpeta donde tenemos instalado MongoDB hay una carpeta "bin", en ella encontraremos todos los ejecutables de MongoDB. En el capitulo anterior ya los agregamos al PATH de nuestro sistema operativo para poder ejecutarlos desde cualquier dirección.
+Los ejecutables más usados son:
 
-* mongod: es el demonio de base de datos, debemos ejecutarlo y dejarlo en ejecución para poder lanzar consultas y trabajar.
-* mongo: es el shell desde el cual  lanzaremos las consultas.
-* mongos: es un servicio de routing de MongoDB Shard.
+- mongod: es el demonio de base de datos, debemos ejecutarlo y dejarlo en ejecución para poder lanzar consultas y trabajar.
+- mongo: es el shell desde el cual  lanzaremos las consultas.
+- mongos: es un servicio de routing de MongoDB Shard.
 
 Por lo que si no tienes ya iniciado mongod lo primero es iniciarlo con:
 ```

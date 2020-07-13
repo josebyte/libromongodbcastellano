@@ -7,7 +7,7 @@ Los índices en MongoDB funcionan igual que en cualquier base de datos. Si reali
 
 ##Consideraciones
 
-Cuando creas índices debes tener en cuanta lo siguiente:
+Cuando creas índices debes tener en cuenta lo siguiente:
 
 * Por defecto los \_id de todas las colecciones tienen un índice.
 * Cada índice requiere 8KB de espacio.
@@ -16,19 +16,21 @@ Cuando creas índices debes tener en cuanta lo siguiente:
 * Cada índice activo consume espacio en disco y memoria. Este uso puede ser importante y debe ser analizado para la planificación de la capacidad.
 
 
-##Ver indices
+##Ver índices
 Puedes ver todos los índices de la base de datos con la siguiente consulta:
 
 ```
 db.system.indexes.find()
 ```
 
-Si quieres ver los indices de una colección concreta:
+Si quieres ver los índices de una colección concreta:
+
 ```
 db.micoleccion.getIndexes()
 ```
 
 Si quisiéramos ver el tamaño de los índices de una colección:
+
 ```
 db.micoleccion.totalIndexSize()
 ```
@@ -36,12 +38,15 @@ db.micoleccion.totalIndexSize()
 ##Funcionamiento de los índices
 
 Si creamos un índice para "nombre":
+
 ```
 db.createIndex({nombre:1})
 ```
+
 - Las consultas sobre nombre usaran el índice.
 
 Si creamos un índice sobre "nombre" y "apellido".
+
 ```
 db.createIndex({nombre:1, apellido:1})
 ```
@@ -52,9 +57,9 @@ db.createIndex({nombre:1, apellido:1})
 
 Puedes forzar usar un índice determinado indicando a la consulta
 .hint({campo:1})
-.hint({$natural:1}) //para no usar indice
+.hint({$natural:1}) //para no usar índice
 
-Por defecto en el log encontraremos las consultas que tardan mas de 100ms
+Por defecto en el log encontraremos las consultas que tardan más de 100ms
 
 Podemos usar profiler para establecer el nivel de capturas que deseamos realizar:
 * 0 desactivado
@@ -72,17 +77,20 @@ db.system.profile.find()
 ##Crear indices
 
 Para crear un índice:
+
 ```
 db.micoleccion.createIndex({micampo:1})
 db.micoleccion.ensureIndex({micampo:1}) //Para versiones previas a 3.0
 ```
 
 Podemos crear índices compuestos de varios campos
+
 ```
 db.micoleccion.createIndex({{micampo:1 , orden:1})
 ```
 
-###Índice unico
+###Índice único
+
 ```
 db.micoleccion.createIndex({{micampo:1},{unique:true})
 ```
@@ -91,7 +99,7 @@ o
 ###Eliminar duplucados
 Si en la creación indicamos la opción dropDups:1 eliminaremos los valores duplicados.
 
-###Borrar indece:
+###Borrar índice:
 ```
 db.micoleccion.dropIndex({micampo:1});
 ```
@@ -107,7 +115,7 @@ Si hacemos un .explain() de una consulta y dice isMultiKey significa que usa es 
 
 ###Sparse index
 
-Los índices creados con la opción sparse:1 generará índices solo para los campos con valor disntito de null. Es usado principalmente en conjunto con unique ya que si no disponen ese campo se considera que tienen null y hay valores duplicados.
+Los índices creados con la opción sparse:1 generará índices solo para los campos con valor distinto de null. Es usado principalmente en conjunto con unique ya que si no disponen ese campo se considera que tienen null y hay valores duplicados.
 
 ###Índices en background
 Por defecto se lanzan en foreground y son mas rápidas pero bloquean las escrituras en la misma base de datos.
@@ -151,7 +159,7 @@ find({$text:{$search:{"dog CAT"}}})
 ```
 Hace un OR con las palabras.
 
-Podemos proyectar y ordenar por $meta:"textScore" para obtener los mejores resultados para nuestra busqueda ordenados
+Podemos proyectar y ordenar por $meta:"textScore" para obtener los mejores resultados para nuestra búsqueda ordenados.
 
 
 

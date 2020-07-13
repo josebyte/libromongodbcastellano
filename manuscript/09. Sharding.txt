@@ -9,43 +9,43 @@ El sharding sirve para repartirse uniformemente la carga de trabajo de la base d
 * Escalabilidad: Permite particionar, de manera transparente para el usuario, nuestra base de datos en shards. Esto aumenta el rendimiento al ser cada una de ellas más pequeña que la original.
 * Auto balanceado de carga a través de los distintos shards. El balanceador decide cuándo migrar los datos, y a qué Shard, para que estén uniformemente distribuidos entre todos los servidores del cluster. 
 
-Imaginemos disponemos de una coleccion "pedidos" con gran cantidad de información almacenada.
+Imaginemos disponemos de una colección "pedidos" con gran cantidad de información almacenada.
 
-Disponemos de varias bases de datos y queremos repartir la información de esa coleccion "pedidos". Para ello vamos a crear shards.
+Disponemos de varias bases de datos y queremos repartir la información de esa colección "pedidos". Para ello vamos a crear shards.
 
 S1, S2, S3, S4...
 
-Cada shard contine normalmente un replicaSet. Y para gestionarlos y enrutarlos se usa "mongos". Mongos mantendra una especie de pool de conexiones de todos los hosts.
+Cada shard contiene normalmente un replicaSet. Y para gestionarlos y enrutarlos se usa "mongos". Mongos mantendrá una especie de pool de conexiones de todos los hosts.
 
-En sharding se realiza una particion de datos por rango para almacenar los datos en funcion de su shard-key.
+En sharding se realiza una partición de datos por rango para almacenar los datos en función de su shard-key.
 
 Las particiones se realizan basadas en rangos sobre la shard-key.
 
-El shard-key es una clave que define el usuario para dividir los documentos en distintos servidores. Cuando establecemos un shard-key mongo dividira los valores en chunks. Esos "chunks" no dejan de ser una agrupación de datos en funcion de un campo dado.
+El shard-key es una clave que define el usuario para dividir los documentos en distintos servidores. Cuando establecemos un shard-key mongo dividirá los valores en chunks. Esos "chunks" no dejan de ser una agrupación de datos en función de un campo dado.
 
-Cuando hacemos una consulta, mongod se comunica con mongos y si existe un shard que satisfaga la consulta, mira los chunks y ve donde tiene que enrutar la consulta. Por ejemplo si definimos el shard-key con pedido_id y buscamos pedido_id=100. nuestro mongos podria enrutarnos al shard s2 que contiene ese documento despues de mapear los chunks.
+Cuando hacemos una consulta, mongod se comunica con mongos y si existe un shard que satisfaga la consulta, mira los chunks y ve donde tiene que enrutar la consulta. Por ejemplo, si definimos el shard-key con pedido_id y buscamos pedido_id=100. nuestro mongos podría enrutarnos al shard s2 que contiene ese documento despues de mapear los chunks.
 
 
 ##Como elegir una shard-key correctamente
 
-- Debes asegurarte que haya suficiente cardinalidad: Suficiente variedad de valores. Seria absurdo crear una shard-key sobre un campo en el cual los valores son casi todos iguales.
-- Evitar hotspots: Evitar asignar la shard-key a campos que son monotonamente crecientes. Los chunks tiene un minkey y un maxkey. Los campos como \_id que solo crecen iran siempre al shard mas alto y no lograremos lo que estamos buscando.
+- Debes asegurarte que haya suficiente cardinalidad: Suficiente variedad de valores. Sería absurdo crear una shard-key sobre un campo en el cual los valores son casi todos iguales.
+- Evitar hotspots: Evitar asignar la shard-key a campos que son monótonamente crecientes. Los chunks tiene un minkey y un maxkey. Los campos como \_id que solo crecen irán siempre al shard más alto y no lograremos lo que estamos buscando.
 
-Supongamos que estamos buscando la shard-key para una coleccion de pedidos con order_id, order_date y vendor.
+Supongamos que estamos buscando la shard-key para una colección de pedidos con order_id, order_date y vendor.
 
-¿Cual es el shard-key ideal para esta coleccion?
+¿Cuál es el shard-key ideal para esta colección?
 
-Si deseamos seguir los consejos anteriores deberiamos descartar order_id ya que crecera monotonamente.
+Si deseamos seguir los consejos anteriores deberíamos descartar order_id ya que crecerá monotonamente.
 
 ¿Entre order_date y vendor cual es mejor shard-key?
-Si vendor tiene suficiente cardinalidad podria ser una buena elección.
+Si vendor tiene suficiente cardinalidad podría ser una buena elección.
 
-El order_date tiene un problema y es que normalmente se ira incrementando y podriamos tener hotspot asi que no es una gran eleccion. Vendor podria funcionar bien como shard-key.
+El order_date tiene un problema y es que normalmente se irá incrementando y podríamos tener hotspot así que no es una gran elección. Vendor podría funcionar bien como shard-key.
 
 
 ##Configurar shard-key
 
-Esta labor quiza este mas orientada para los DBA pero a continuación detallo como se realizaria una configuracion de shards.
+Esta labor quizá esté más orientada para los DBA pero a continuación detallo como se realizaría una configuración de shards.
 
 Creamos la carpeta donde almacenaremos la base de datos.
 ```
@@ -57,7 +57,7 @@ Iniciamos la configuración:
 mongod --configsvr --port 27000 --dbpath /data/configdb
 ```
 
-Por ejemplo si disponemos de los siguientes hosts:
+Por ejemplo, si disponemos de los siguientes hosts:
 
 cfg0.mishard.net
 cfg1.mishard.net
@@ -82,6 +82,6 @@ sh.addShard( "rs1/mongodb0.example.net:27017" )
 Notas:
 
 - En entornos de producción se debe ejecutar cada una de las instancias de servidor en un servidor distinto para garantizar una respuesta rápida y seguridad. Con fines de testing es posible configurar cada shard en el mismo servidor.
-- Es importante que todas las instancias de servidor tengan acceso al resto de instancias por lo que la configuracion del firewall y la red debe realizarse correctamente.
+- Es importante que todas las instancias de servidor tengan acceso al resto de instancias por lo que la configuración del firewall y la red debe realizarse correctamente.
 - Por defecto cada servidor almacena la información en: /data/configdb
 - Por defecto mongos se ejecuta en el puerto 27017.

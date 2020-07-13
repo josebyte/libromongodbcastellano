@@ -44,7 +44,7 @@ La agregación usa un pipeline, y cada una de estas fases pueden aparecer más d
 - $skip -> saltar documentos. n-1
 - $limit -> limitar los resultados.
 - $unwind -> normaliza el array, por ejemplo: tags:["rojo", "azul"] se convertirá en: tags: "rojo", tags: "azul"
-- $out -> redirigir la salida a otra coleccion en lugar de a un cursor (por defecto) 1-1
+- $out -> redirigir la salida a otra colección en lugar de a un cursor (por defecto) 1-1
 
 Expresiones:
 
@@ -60,7 +60,7 @@ Expresiones:
 - $last -> requiere que ordenes con sort los documentos
 
 
-Si quisiéramos sumar los puntos de cada pais que han obtenido los usuarios:
+Si quisiéramos sumar los puntos de cada país que han obtenido los usuarios:
 ```
 db.usuarios.aggregate([
 {

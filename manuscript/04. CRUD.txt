@@ -201,7 +201,7 @@ Podemos utilizar los siguientes operadores para evaluar en nuestras consultas.
 - $all    -> Evalúa si todos los valores se encuentran dentro del array.
 - $mod    -> (Modulo) Aplica la operación de módulo y lo compara con el valor pasado.
 - $regex  -> Selecciona los documentos que casan con el valor de la expresión regular.
-- $text   -> Realiza una busqueda de texto.
+- $text   -> Realiza una búsqueda de texto.
 - $where  -> Casa con los documentos que satisfagan una expresión en JavaScript.
 
 
@@ -228,8 +228,8 @@ db.inventory.find( { $or: [ { quantity: { $lt: 20 } }, { price: 10 } ] } )
 - $geoWithin: Selecciona geometrías dentro de una geometría GeoJSON. Los índices 2dsphere y 2d soportan $geoWithin.
 - $geoIntersects: Seleccionan las geometrías con intersección en un GeoJSON. Los índices 2dsphere y 2d lo soportan.
 - $geoIntersects.
-- $near: Devuelve un objeto geoespacial en la proximidad de un punto. Require un índice geoespacial.  Los índices 2dsphere y 2d soportan $near.
-- $nearSphere: Devuelve un objeto geoespacial en la proximidad de un punto de la esfera. Require un índice geoespacial. Los índices 2dsphere y 2d soportan $nearSphere.
+- $near: Devuelve un objeto geoespacial en la proximidad de un punto. Requiere un índice geoespacial.  Los índices 2dsphere y 2d soportan $near.
+- $nearSphere: Devuelve un objeto geoespacial en la proximidad de un punto de la esfera. Requiere un índice geoespacial. Los índices 2dsphere y 2d soportan $nearSphere.
 
 ###Array
 

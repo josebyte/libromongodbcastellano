@@ -2,8 +2,6 @@
 
 El material que me ha ayudado a escribir este libro y considero de tu interés es el siguiente:
 
-Documentación oficial de MongoDB:
-https://docs.mongodb.org/manual/
+Documentación oficial de MongoDB: [https://docs.mongodb.org/manual/](https://docs.mongodb.org/manual/)
 
-Cursos gratuitos de Mongo University:
-M101
+Cursos gratuitos de [Mongo University](https://university.mongodb.com/)

@@ -2,7 +2,7 @@
 
 La forma de lograr *alta disponibilidad* y *tolerancia a fallos* es con las *replicaSet*. Con sharding lo que se hace es partir la información en varios fragmentos por lo que lo que logramos es escalabilidad.
 
-Para crear un sistema con tolerancia a fallos y alta disponibilidad debemos crear un ReplicaSet. Vamos a plantear un esquema comun de 3 nodos de mongod (el mínimo de nodos es 3 para un ReplicaSet) funcionando con los mismos datos y trabajando en equipo.
+Para crear un sistema con tolerancia a fallos y alta disponibilidad debemos crear un ReplicaSet. Vamos a plantear un esquema común de 3 nodos de mongod (el mínimo de nodos es 3 para un ReplicaSet) funcionando con los mismos datos y trabajando en equipo.
 Hay tres tipos de nodo en los ReplicaSet:
 
 - Normal (Primario y Secundarios)
@@ -10,13 +10,13 @@ Hay tres tipos de nodo en los ReplicaSet:
 - Arbitro
 - Oculto
 
-Los datos se escriben sobre el primario y luego se replican asincronamente en los secundarios. Los árbitros nunca pueden convertirse en primarios y unicamente entran en accion cuando el nodo primario se cae y es necesario votar para elegir un nuevo primario. Para tener un nuevo primario debes tener una mayoría estricta del numero original de nodos.
+Los datos se escriben sobre el primario y luego se replican asíncronamente en los secundarios. Los árbitros nunca pueden convertirse en primarios y únicamente entran en acción cuando el nodo primario se cae y es necesario votar para elegir un nuevo primario. Para tener un nuevo primario debes tener una mayoría estricta del número original de nodos.
 
 Cuando un nodo se recupera vuelve como secundario.
 
 Las elecciones de nodo primario se realizan de forma transparente para el usuario.
 
-Veamos como hacer un replicaSet para lograr alta disponibilidad y tolerancia a fallo. Antes de nada debo decir que lo lógico y natural es que para lograr lo anterior debemos disponer de 3 servidores distintos ya que si los montamos sobre la misma maquina no estamos solucionando nada en el caso de que se caiga o se rompa. Aclarado eso y solo con fines educativos crearemos el replicaset sobre la misma maquina en diferentes puertos (ya sabemos que esta mal pero es solo para aprender).
+Veamos cómo hacer un replicaSet para lograr alta disponibilidad y tolerancia a fallo. Antes de nada, debo decir que lo lógico y natural es que para lograr lo anterior debemos disponer de 3 servidores distintos ya que si los montamos sobre la misma maquina no estamos solucionando nada en el caso de que se caiga o se rompa. Aclarado eso y solo con fines educativos crearemos el replicaset sobre la misma maquina en diferentes puertos (ya sabemos que está mal pero es solo para aprender).
 
 Lo primero vamos a especificar un nombre para nuestro replicaSet mediante:
 

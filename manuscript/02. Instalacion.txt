@@ -12,19 +12,32 @@ En la documentación oficial de MongoDB se indica como instalar MongoDB en cada 
 
 Debemos descargarnos la versión "community" correcta (64 o 32 bits) de la [web oficial](https://www.mongodb.com/try/download/community) de MongoDB.
 
-Se puede elegir si descargar un zip o un archivo de instalación con la extensión ".msi", sobre el que haciendo doble click comenzará la instalación.
+Se puede elegir si descargar un zip o un archivo de instalación con la extensión ".msi", elegiremos la opcion .msi y una vez descargado haremos doble click para comenzar la instalación.
+
+![win1](./images/win1.png)
 
 Debemos hacer click en "I accept the terms in the LIcense Agreement" y a continuación hacer click "Next".
 
+![win2](./images/win2.png)
+
 Debemos hacer click en "Complete".
+
+![win3](./images/win3.png)
 
 A continuación nos pregunta por el nombre del servicio y los directorios donde se ubicara la base de datos, los podemos mantener con los valores por defecto.
 
-En la siguiente pantalla por defecto podemos ver en la parte inferior un check, lo mantendremos checheado tal y como viene por defecto para instalar tambien el GUI de MongoDb Compass.
+![win4](./images/win4.png)
+
+En la siguiente pantalla por defecto podemos ver en la parte inferior un check "Install MongoDB Compass", por defecto viene marcado, es importante desmarcalo ya que la instalación sería de la versión Community de Compass y la opción completa ya es totalmente gratuita para todos los usuarios.
+Compass es una interfaz gráfica para visualizar bases de datos, esquemas y documentos. Podemos descargarla desde la siguiente url: [https://www.mongodb.com/try/download/compass]( https://www.mongodb.com/try/download/compass)
+
+![win4](./images/win4.png)
 
 Para configurar el entorno es necesario definir el directorio donde guardará MongoDB los datos. Por defecto es "c:\Program Files\MongoDb\Server\4.2\data"`
 
-Una vez finializada la instalación debemos definir las variables de entorno en el sistema operativo:
+![win5](./images/win5.png)
+
+Una vez finalizada la instalación debemos definir las variables de entorno en el sistema operativo:
 
 1. Panel de control
 2. Sistema
@@ -110,3 +123,24 @@ mongo --nodb
 ```
 
 Entraremos en el shell de Mongo y veremos la versión con la que estamos trabajando. Por ejemplo: MongoDB shell version v4.2.8
+
+##Bonus: Como crear un contenedor de MongoDB con Docker
+
+Si en lugar de instalar en el sistema MongoDB queremos crearnos un contenedor es tan sencillo como creark en nuestro proyecto un archivo docker-compose.yml con el siguiente contenido:
+
+```
+version: '3.7'
+services:
+  mongodb_container:
+    image: mongo:4.2.8
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+volumes:
+  mongodb_data_container:
+```

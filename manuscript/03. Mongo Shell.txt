@@ -1,6 +1,6 @@
 #Mongo Shell
 
-En la carpeta donde tenemos instalado MongoDB hay una carpeta "bin", en ella encontraremos todos los ejecutables de MongoDB. En el capitulo anterior ya los agregamos al PATH de nuestro sistema operativo para poder ejecutarlos desde cualquier dirección.
+En la carpeta donde tenemos instalado MongoDB hay una carpeta "bin", en ella encontraremos todos los ejecutables de MongoDB. En el capítulo anterior ya los agregamos al PATH de nuestro sistema operativo para poder ejecutarlos desde cualquier dirección.
 Los ejecutables más usados son:
 
 - mongod: es el demonio de base de datos, debemos ejecutarlo y dejarlo en ejecución para poder lanzar consultas y trabajar.
@@ -8,11 +8,13 @@ Los ejecutables más usados son:
 - mongos: es un servicio de routing de MongoDB Shard.
 
 Por lo que si no tienes ya iniciado mongod lo primero es iniciarlo con:
+
 ```
 mongod
 ```
 
 Ahora vamos a empezar a lanzar consultas contra nuestro mongod, para ello accedemos a nuestro shell escribiendo:
+
 ```
 mongo
 ```
@@ -21,24 +23,28 @@ Por defecto intentaremos conectarnos al mongod de localhost en el puerto 27017. 
 
 Mongo shell es parte de MongoDB y proporciona un entorno completo de Javascript además de una interfaz para MongoDB.
 
-Desde el shell estos son los comandos más básicos y utilizados, no hace falta que los probeis, de momento esta lista es para que os vayan sonando ya que los iremos utilizando a lo largo del libro:
+Desde el shell estos son los comandos más básicos y utilizados, no hace falta que los probéis, de momento esta lista es para que os vayan sonando ya que los iremos utilizando a lo largo del libro:
 
 Mostrar la base de datos actual:
+
 ```
 db
 ```
 
 Muestra la lista de bases de datos:
+
 ```
 show dbs
 ```
 
 Seleccionaremos la base de datos "midb":
+
 ```
 use midb
 ```
 
 Si realizamos una búsqueda en una colección de la base de datos elegida:
+
 ```
 db.usuarios.find()
 ```
@@ -46,12 +52,13 @@ db.usuarios.find()
 El shell de MongoDB devolverá un cursor con los primeros 20 resultados, si queremos mostrar más usaremos la palabra "it" para iterar el cursor.
 
 Un cursor se cerrará pasados 10 minutos o cuando iteramos todos sus resultados. Podemos modificar el tiempo que permanecerá abierto el cursor. Podemos establecer el tiempo máximo del cursor con el siguiente comando:
+
 ```
 var micursor = db.usuarios.find()
 micursor.maxTimeMS(1200000)
 ```
 
-El comando anterior ampliará el tiempo máximo de "micursor" a 20 mininutos (el parametro que recibe es milisegundos, 1200000==20min), aunque si es iterado completamente se cerrará antes de ese tiempo máximo.
+El comando anterior ampliará el tiempo máximo de "micursor" a 20 minutos (el parámetro que recibe es milisegundos, 1200000==20min), aunque si es iterado completamente se cerrará antes de ese tiempo máximo.
 
 
 Para imprimir un documento JSON de forma más "bonita" tenemos las siguientes opciones:
@@ -60,14 +67,19 @@ Para imprimir un documento JSON de forma más "bonita" tenemos las siguientes op
 * printjson() == print(tojson()) Para imprimir variables.
 
 Si queremos almacenar un array en una variable:
+
 ```
 var users = db.usuarios.find()
 ```
+
 Para obtener el indice 4 o la posición 4 del cursor almacenado en la variable users creada en la linea anterior:
+
 ```
 printjson( users [ 4 ] )
 ```
+
 Mongo devolverá el usuario en esa posición:
+
 ```
 { "_id" : ObjectId("51a7dc7b2cacf40b79990bea"), "nombre" : "Joseba", "surname" : "Madrigal" }
 ```

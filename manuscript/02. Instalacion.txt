@@ -14,28 +14,28 @@ Debemos descargarnos la versión "community" correcta (64 o 32 bits) de la [web 
 
 Se puede elegir si descargar un zip o un archivo de instalación con la extensión ".msi", elegiremos la opcion .msi y una vez descargado haremos doble click para comenzar la instalación.
 
-![win1](./images/win1.png)
+![win1](images/win1.png)
 
 Debemos hacer click en "I accept the terms in the LIcense Agreement" y a continuación hacer click "Next".
 
-![win2](./images/win2.png)
+![win2](images/win2.png)
 
 Debemos hacer click en "Complete".
 
-![win3](./images/win3.png)
+![win3](images/win3.png)
 
 A continuación nos pregunta por el nombre del servicio y los directorios donde se ubicara la base de datos, los podemos mantener con los valores por defecto.
 
-![win4](./images/win4.png)
+![win4](images/win4.png)
 
 En la siguiente pantalla por defecto podemos ver en la parte inferior un check "Install MongoDB Compass", por defecto viene marcado, es importante desmarcalo ya que la instalación sería de la versión Community de Compass y la opción completa ya es totalmente gratuita para todos los usuarios.
 Compass es una interfaz gráfica para visualizar bases de datos, esquemas y documentos. Podemos descargarla desde la siguiente url: [https://www.mongodb.com/try/download/compass]( https://www.mongodb.com/try/download/compass)
 
-![win4](./images/win4.png)
+![win4](images/win4.png)
 
 Para configurar el entorno es necesario definir el directorio donde guardará MongoDB los datos. Por defecto es "c:\Program Files\MongoDb\Server\4.2\data"`
 
-![win5](./images/win5.png)
+![win5](images/win5.png)
 
 Una vez finalizada la instalación debemos definir las variables de entorno en el sistema operativo:
 
@@ -143,4 +143,10 @@ services:
 
 volumes:
   mongodb_data_container:
+```
+
+Para ejecutar el contenedor:
+
+```
+docker-compose up -d
 ```
